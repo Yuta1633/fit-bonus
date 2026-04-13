@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fit Project AI — 無料特典ガイド集</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root { color-scheme: dark; }
+html, body {
+  background: #05050f !important;
+  color: #f0f0f8;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 20px 80px;
+  background: #05050f;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+  top: -150px; left: -150px; pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(26,188,156,0.12) 0%, transparent 70%);
+  bottom: -100px; right: -100px; pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(233,69,96,0.4);
+  background: rgba(233,69,96,0.1);
+  border-radius: 100px;
+  padding: 7px 20px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #E94560;
+  margin-bottom: 36px;
+  position: relative; z-index: 1;
+  animation: up 0.7s ease both;
+}
+
+.hero-title {
+  font-weight: 900;
+  font-size: clamp(36px, 8vw, 84px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin-bottom: 24px;
+  position: relative; z-index: 1;
+  animation: up 0.7s 0.1s ease both;
+}
+.grad {
+  background: linear-gradient(135deg, #E94560 0%, #FF6B35 45%, #8E6BBF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: clamp(13px, 2vw, 17px);
+  color: #7070a0;
+  max-width: 480px;
+  line-height: 1.85;
+  font-weight: 300;
+  margin-bottom: 52px;
+  position: relative; z-index: 1;
+  animation: up 0.7s 0.2s ease both;
+}
+
+.stats-row {
+  display: flex;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 60px;
+  position: relative; z-index: 1;
+  animation: up 0.7s 0.3s ease both;
+}
+.stat-item {
+  padding: 18px 32px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  line-height: 1;
+  color: #ffffff;
+}
+.stat-l {
+  font-size: 10px;
+  color: #505080;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #303058;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 1;
+}
+.scroll-bar {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, #404060, transparent);
+  animation: scrollA 2s ease-in-out infinite;
+}
+
+.cards-wrap {
+  background: #05050f;
+  padding: 72px 20px 100px;
+}
+.cards-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.sec-head { text-align: center; margin-bottom: 52px; }
+.sec-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #303060;
+  margin-bottom: 10px;
+}
+.sec-title {
+  font-size: clamp(20px, 4vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f0f0f8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: #0b0b1c;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  animation: up 0.5s ease both;
+}
+.card:hover { transform: translateY(-6px); }
+.card:nth-child(1) { --ac: #E94560; animation-delay:.05s }
+.card:nth-child(2) { --ac: #1ABC9C; animation-delay:.10s }
+.card:nth-child(3) { --ac: #FF6B35; animation-delay:.15s }
+.card:nth-child(4) { --ac: #A782DC; animation-delay:.20s }
+.card:nth-child(5) { --ac: #2ECC71; animation-delay:.25s }
+.card:hover { border-color: var(--ac); box-shadow: 0 20px 48px rgba(0,0,0,0.7), 0 0 0 1px var(--ac); }
+
+.thumb-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #111;
+}
+.thumb-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.card:hover .thumb-wrap img { transform: scale(1.05); }
+.thumb-over {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover .thumb-over { opacity: 1; }
+.play-btn {
+  width: 54px; height: 54px;
+  background: var(--ac);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.play-btn:hover { transform: scale(1.12); }
+.play-btn svg { width: 22px; height: 22px; fill: white; margin-left: 4px; }
+
+.card-body { padding: 18px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--ac);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 11px;
+  border-radius: 100px;
+  margin-bottom: 8px;
+}
+.card-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  color: #303058;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #f0f0f8;
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 12px;
+  color: #505080;
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+.tag {
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #505080;
+}
+.card-ft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 13px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.pages {
+  font-size: 11px;
+  color: #303058;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pages::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ac);
+  display: inline-block;
+}
+.dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--ac);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 8px 15px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s, filter 0.2s;
+  white-space: nowrap;
+}
+.dl-btn:hover { transform: scale(1.04); filter: brightness(1.12); }
+.dl-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+.cta-sec {
+  background: #03030c;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+  padding: 80px 20px 100px;
+}
+.cta-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #E94560; margin-bottom: 14px; }
+.cta-title { font-size: clamp(20px, 4vw, 38px); font-weight: 900; letter-spacing: -0.02em; color: #f0f0f8; line-height: 1.35; margin-bottom: 14px; }
+.cta-title em { font-style: normal; color: #E94560; }
+.cta-desc { color: #505080; font-size: 13px; font-weight: 300; line-height: 1.85; max-width: 360px; margin: 0 auto 32px; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, #E94560 0%, #FF6B35 100%);
+  color: #fff; font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 15px 34px; border-radius: 100px;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(233,69,96,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(233,69,96,0.45); }
+
+footer {
+  background: #020208;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  text-align: center;
+  padding: 24px 20px;
+  color: #303058;
+  font-size: 11px;
+}
+footer strong { color: #6060a0; }
+
+@keyframes up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollA {
+  0%,100% { opacity:1; } 50% { opacity:0.2; }
+}
+
+@media (max-width: 560px) {
+  .stats-row { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .stat-item:last-child { border-bottom: none; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="eyebrow">★ Fit Project AI — 無料特典</div>
+  <h1 class="hero-title">体づくりを<br><span class="grad">科学で加速させる</span><br>5冊のガイド</h1>
+  <p class="hero-desc">研究論文に基づく正確な情報だけを凝縮。<br>筋肥大・脂肪燃焼・回復を最短で最大化する<br>実践ガイド集。</p>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-n">5</div><div class="stat-l">種類のガイド</div></div>
+    <div class="stat-item"><div class="stat-n">25+</div><div class="stat-l">総ページ数</div></div>
+    <div class="stat-item"><div class="stat-n">30+</div><div class="stat-l">引用論文</div></div>
+  </div>
+  <div class="scroll-hint"><span>scroll</span><div class="scroll-bar"></div></div>
+</section>
+
+<div class="cards-wrap">
+  <div class="cards-inner">
+    <div class="sec-head">
+      <div class="sec-label">Special Contents</div>
+      <h2 class="sec-title">特典ガイド一覧</h2>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="thumb_01_bench.png" alt="">
+          <div class="thumb-over">
+            <a href="01_bench_press_100kg.pdf" target="_blank" class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🏋 筋力強化</div>
+          <div class="card-num">GUIDE 01</div>
+          <h3 class="card-title">ベンチプレス100kg達成ガイド</h3>
+          <p class="card-desc">初心者〜中級者が最短で100kgを挙げるための完全ロードマップ。フォーム・プログラム・食事・怪我予防まで網羅。</p>
+          <div class="tags"><span class="tag">フォーム解説</span><span class="tag">段階別プログラム</span><span class="tag">補助種目</span><span class="tag">クレアチン</span></div>
+          <div class="card-ft">
+            <span class="pages">5ページ</span>
+            <a href="01_bench_press_100kg.pdf" download class="dl-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="thumb_02_muscle.png" alt="">
+          <div class="thumb-over">
+            <a href="02_muscle_diet.pdf" target="_blank" class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🍗 筋肥大栄養学</div>
+          <div class="card-num">GUIDE 02</div>
+          <h3 class="card-title">筋肥大のための食事完全ガイド</h3>
+          <p class="card-desc">筋肉を最大限に増やすための栄養戦略と実践プラン。カロリー設計からタイミング戦略・モデルプランまで。</p>
+          <div class="tags"><span class="tag">カロリー設計</span><span class="tag">三大栄養素</span><span class="tag">食事タイミング</span><span class="tag">レシピ3選</span></div>
+          <div class="card-ft">
+            <span class="pages">5ページ</span>
+            <a href="02_muscle_diet.pdf" download class="dl-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="thumb_03_fatloss.png" alt="">
+          <div class="thumb-over">
+            <a href="03_fat_loss_diet.pdf" target="_blank" class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🔥 脂肪燃焼</div>
+          <div class="card-num">GUIDE 03</div>
+          <h3 class="card-title">脂肪燃焼のための食事ガイド</h3>
+          <p class="card-desc">筋肉を守りながら体脂肪だけを落とす科学的食事戦略。カロリー赤字の設計から停滞期の突破法まで。</p>
+          <div class="tags"><span class="tag">カロリー赤字</span><span class="tag">タンパク質増量</span><span class="tag">停滞期対策</span><span class="tag">体脂肪率目安</span></div>
+          <div class="card-ft">
+            <span class="pages">5ページ</span>
+            <a href="03_fat_loss_diet.pdf" download class="dl-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="thumb_04_sleep.png" alt="">
+          <div class="thumb-over">
+            <a href="04_sleep_recovery.pdf" target="_blank" class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="badge">😴 睡眠・回復</div>
+          <div class="card-num">GUIDE 04</div>
+          <h3 class="card-title">睡眠・回復完全ガイド</h3>
+          <p class="card-desc">筋肉は眠っている間に作られる。成長ホルモン・テストステロン・回復メカニズムを科学的に完全解説。</p>
+          <div class="tags"><span class="tag">睡眠サイクル</span><span class="tag">10のアクション</span><span class="tag">回復加速法</span><span class="tag">OTS予防</span></div>
+          <div class="card-ft">
+            <span class="pages">5ページ</span>
+            <a href="04_sleep_recovery.pdf" download class="dl-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="thumb_05_split.png" alt="">
+          <div class="thumb-over">
+            <a href="05_training_split.pdf" target="_blank" class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="badge">📋 分割法</div>
+          <div class="card-num">GUIDE 05</div>
+          <h3 class="card-title">トレーニング分割法完全ガイド</h3>
+          <p class="card-desc">目標・頻度・レベルに合わせた最適な分割法の選び方と実践プログラム。PPL・上下分割の週プランも収録。</p>
+          <div class="tags"><span class="tag">全身法・PPL</span><span class="tag">上下分割</span><span class="tag">週間プログラム</span><span class="tag">ボリューム設計</span></div>
+          <div class="card-ft">
+            <span class="pages">5ページ</span>
+            <a href="05_training_split.pdf" download class="dl-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<section class="cta-sec">
+  <div class="cta-label">Next Step</div>
+  <h2 class="cta-title">体が変われば、<br><em>人生が変わる。</em></h2>
+  <p class="cta-desc">まずは無料で、あなただけの体づくりの方向性を一緒に決めましょう。</p>
+  <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="cta-btn">人生が変わる体づくり 無料セッションに参加する →</a>
+</section>
+
+<footer>
+  <strong>Fit Project AI</strong> &nbsp;|&nbsp; あなただけの正解を仕組みにして、最短で理想の体へ
+</footer>
+
+</body>
+</html>
