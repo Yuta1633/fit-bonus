@@ -161,6 +161,13 @@ html, body {
   letter-spacing: -0.02em;
   color: #f0f0f8;
 }
+.sec-sub {
+  font-size: 12px;
+  color: #505080;
+  font-weight: 300;
+  margin-top: 10px;
+  line-height: 1.8;
+}
 
 .grid {
   display: grid;
@@ -302,6 +309,103 @@ html, body {
 }
 .dl-btn:hover { transform: scale(1.04); filter: brightness(1.12); }
 .dl-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* Locked tool cards — premium gold treatment, visually distinct from free guides */
+:root { --pg: #FFC759; --pg2: #FFE1A8; --pg3: #C79A2E; }
+.tool-card {
+  position: relative;
+  background: linear-gradient(165deg, #1a1508 0%, #0b0b1c 55%);
+  border: 1px solid rgba(255,199,89,0.28);
+  box-shadow: 0 0 0 1px rgba(255,199,89,0.05) inset, 0 20px 50px rgba(0,0,0,0.55);
+}
+.tool-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,199,89,0.07), transparent 55%);
+  pointer-events: none;
+}
+.tool-card:hover { border-color: rgba(255,199,89,0.6); box-shadow: 0 20px 55px rgba(0,0,0,0.7), 0 0 0 1px var(--pg); }
+.tool-card .thumb-wrap { background:#111; }
+.tool-card .thumb-wrap img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter: saturate(0.92) contrast(1.06);
+  transition: transform 0.5s ease;
+}
+.tool-card:hover .thumb-wrap img { transform: scale(1.05); }
+.tool-card .thumb-wrap::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(20,15,4,0.1) 0%, rgba(8,6,1,0.6) 100%),
+    linear-gradient(135deg, rgba(255,199,89,0.16), transparent 60%);
+  pointer-events:none;
+}
+
+.premium-ribbon {
+  position: absolute; top: 0; left: 0;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: linear-gradient(135deg, var(--pg2), var(--pg));
+  color: #201404;
+  font-size: 10px; font-weight: 900; letter-spacing: 0.1em;
+  padding: 6px 14px 6px 12px;
+  border-radius: 0 0 10px 0;
+  z-index: 2;
+}
+.premium-ribbon svg { width: 11px; height: 11px; fill: #201404; }
+
+.lock-badge {
+  position: absolute; top: 12px; right: 12px;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(20,15,4,0.9);
+  border: 1px solid var(--pg);
+  color: var(--pg);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 4px 10px; border-radius: 100px;
+  backdrop-filter: blur(4px);
+}
+.lock-badge svg { width: 9px; height: 9px; fill: var(--pg); }
+.preview-box {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.06em;
+  font-size: 13px;
+  color: #7a6a3a;
+  background: rgba(255,199,89,0.04);
+  border: 1px dashed rgba(255,199,89,0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  filter: blur(2.5px);
+  user-select: none;
+}
+.unlock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, var(--pg2), var(--pg));
+  border: none;
+  color: #201404;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 9px 16px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(255,199,89,0.3);
+}
+.unlock-btn:hover { transform: scale(1.04); box-shadow: 0 10px 26px rgba(255,199,89,0.45); }
+.unlock-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+.tool-card.featured { border-color: rgba(255,199,89,0.55); transform: scale(1.015); }
+.tool-card.featured:hover { transform: scale(1.03) translateY(-6px); }
+.tool-card .badge { color: var(--pg); border-color: rgba(255,199,89,0.25); }
+.tool-card .pages::before { background: var(--pg); }
+.tool-card .card-num { color: #4a3f22; }
+.feat-list { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.feat-list li { font-size: 11px; color: #8a8270; line-height: 1.7; display: flex; align-items: flex-start; gap: 7px; }
+.feat-list li::before { content: '✓'; color: var(--pg); font-weight: 900; flex-shrink: 0; }
 
 .cta-sec {
   background: #03030c;
@@ -493,6 +597,158 @@ footer strong { color: #6060a0; }
             <a href="05_training_split.pdf" download class="dl-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               ダウンロード
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="cards-wrap" style="padding-top:0;">
+  <div class="cards-inner">
+    <div class="sec-head">
+      <div class="sec-label">AI Diagnosis</div>
+      <h2 class="sec-title">あなたの"伸びしろ"を、<br>AIが数値で暴く。</h2>
+      <p class="sec-sub">写真1枚と数問の質問で、今のあなたを丸ごとスコア化。全ての結果は無料相談で見られます。</p>
+    </div>
+    <div class="grid">
+
+      <div class="card tool-card featured">
+        <div class="thumb-wrap">
+          <div class="premium-ribbon"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z"/></svg>イチ推しアンロック</div>
+          <img src="thumb_tool01_rank.png" alt="">
+          <div class="lock-badge"><svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0v3z"/></svg>LOCKED</div>
+        </div>
+        <div class="card-body">
+          <div class="badge">📸 体型分析</div>
+          <div class="card-num">TOOL 01</div>
+          <h3 class="card-title">体型ランク診断</h3>
+          <p class="card-desc">写真1枚で、あなたの体をS〜Dランクで採点。伸びしろのある部位を数値で突きつけます。</p>
+          <ul class="feat-list">
+            <li>写真1枚をアップロードするだけ</li>
+            <li>バランス・厚み・引き締まり度をAIが分析</li>
+            <li>S〜Dの5段階でランク判定</li>
+            <li>伸びしろが大きい部位を明示</li>
+          </ul>
+          <div class="preview-box">RANK: ● / SABCD</div>
+          <div class="card-ft">
+            <span class="pages">写真1枚でOK</span>
+            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+              無料相談でアンロック
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tool-card">
+        <div class="thumb-wrap">
+          <img src="thumb_tool02_continue.png" alt="">
+          <div class="lock-badge"><svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0v3z"/></svg>LOCKED</div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🧠 行動科学</div>
+          <div class="card-num">TOOL 02</div>
+          <h3 class="card-title">継続力診断</h3>
+          <p class="card-desc">続けられない本当の理由を10問で特定。タイプが分かれば、あなたに合った続け方がそのまま分かります。</p>
+          <ul class="feat-list">
+            <li>10問の質問に回答(所要2分)</li>
+            <li>挫折パターンを4タイプに分類</li>
+            <li>タイプ別の対処法を提示</li>
+            <li>過去に挫折した原因を言語化</li>
+          </ul>
+          <div class="preview-box">RESULT: あなたは「◯◯◯◯型」</div>
+          <div class="card-ft">
+            <span class="pages">10問・約2分</span>
+            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+              無料相談でアンロック
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tool-card">
+        <div class="thumb-wrap">
+          <img src="thumb_tool03_protein.png" alt="">
+          <div class="lock-badge"><svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0v3z"/></svg>LOCKED</div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🥩 栄養計算</div>
+          <div class="card-num">TOOL 03</div>
+          <h3 class="card-title">タンパク質シミュレーター</h3>
+          <p class="card-desc">体重・年齢・目標・活動量から、あなたに最適な1日のタンパク質量を算出します。</p>
+          <ul class="feat-list">
+            <li>体重・年齢・性別を入力</li>
+            <li>目標(減量/増量など)を選択</li>
+            <li>活動レベルを選択</li>
+            <li>1日の摂取目安量(g)を自動算出</li>
+            <li>食事回数ごとの配分も表示</li>
+          </ul>
+          <div class="preview-box">DAILY TARGET: ●●〜●● g</div>
+          <div class="card-ft">
+            <span class="pages">約1分で算出</span>
+            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+              無料相談でアンロック
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tool-card">
+        <div class="thumb-wrap">
+          <img src="thumb_tool04_meal.png" alt="">
+          <div class="lock-badge"><svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0v3z"/></svg>LOCKED</div>
+        </div>
+        <div class="card-body">
+          <div class="badge">🕐 時間栄養学</div>
+          <div class="card-num">TOOL 04</div>
+          <h3 class="card-title">食事スケジュール設計</h3>
+          <p class="card-desc">起床・就寝時間からあなたの体内時計に合わせた食事スケジュールを自動生成します。</p>
+          <ul class="feat-list">
+            <li>起床・就寝時間を入力</li>
+            <li>1日の食事回数を選択</li>
+            <li>運動タイミングを反映</li>
+            <li>各食事の推奨時間帯を自動生成</li>
+            <li>食事ごとのポイントも表示</li>
+          </ul>
+          <div class="preview-box">TIMELINE: 起床●:●● 〜 就寝●:●●</div>
+          <div class="card-ft">
+            <span class="pages">約1分で生成</span>
+            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+              無料相談でアンロック
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tool-card">
+        <div class="thumb-wrap">
+          <img src="thumb_tool05_training.png" alt="">
+          <div class="lock-badge"><svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0v3z"/></svg>LOCKED</div>
+        </div>
+        <div class="card-body">
+          <div class="badge">💪 プログラム設計</div>
+          <div class="card-num">TOOL 05</div>
+          <h3 class="card-title">トレーニングプラン設計</h3>
+          <p class="card-desc">年齢・経験・目標・週の稼働日数から、最適な週間トレーニングプランを設計します。</p>
+          <ul class="feat-list">
+            <li>年齢・経験レベルを入力</li>
+            <li>目標(筋肥大/脂肪燃焼など)を選択</li>
+            <li>週の稼働可能日数を入力</li>
+            <li>最適な頻度と分割法を提示</li>
+            <li>週間スケジュール表を自動生成</li>
+          </ul>
+          <div class="preview-box">FREQUENCY: 週●回プラン</div>
+          <div class="card-ft">
+            <span class="pages">約1分で設計</span>
+            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+              無料相談でアンロック
             </a>
           </div>
         </div>
