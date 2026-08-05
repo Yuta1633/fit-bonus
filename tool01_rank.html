@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>体型ランク診断｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080A;--card:#0F0F14;--card2:#14141A;--border:#1E1E28;--border2:#252530;
+  --accent:#FFC759;--accent2:#FFE1A8;--accent3:#C79A2E;
+  --green:#10B981;--amber:#F59E0B;
+  --text:#F0EDF5;--text2:#C0BCCC;--muted:#5A566A;
+  --mono:'Space Mono',monospace;--sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:72px}
+.back-btn{position:fixed;top:12px;left:12px;z-index:9999;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(15,15,20,0.85);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s}
+.back-btn:hover{background:rgba(255,199,89,0.15);border-color:var(--accent)}
+.back-btn svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+
+.hdr{background:linear-gradient(160deg,#120E04 0%,#0C0A06 100%);padding:44px 20px 32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,199,89,0.12),transparent 65%);border-radius:50%}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent3),var(--accent),var(--accent3),transparent)}
+.brand{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;margin-bottom:14px;text-transform:uppercase}
+.hdr h1{font-size:28px;font-weight:900;line-height:1.2;margin-bottom:8px}
+.hdr h1 span{color:var(--accent)}
+.hdr p{font-size:12px;color:var(--muted);line-height:1.7}
+.sci-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:5px 12px;background:rgba(255,199,89,0.08);border:1px solid rgba(255,199,89,0.25);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+
+.main{padding:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,199,89,0.2),transparent)}
+.card-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+
+.upload-zone{
+  border:1.5px dashed rgba(255,199,89,0.3);
+  border-radius:12px;
+  padding:28px 16px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s;
+  background:rgba(255,199,89,0.03);
+}
+.upload-zone:hover{border-color:var(--accent);background:rgba(255,199,89,0.06)}
+.upload-zone svg{width:28px;height:28px;stroke:var(--accent);fill:none;stroke-width:1.6;margin-bottom:10px}
+.upload-txt{font-size:13px;color:var(--text2);font-weight:500}
+.upload-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.preview-wrap{display:none;text-align:center}
+.preview-wrap.on{display:block}
+.preview-img{max-width:100%;max-height:280px;border-radius:12px;margin-bottom:10px;border:1px solid var(--border)}
+.preview-change{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:1px;cursor:pointer;text-decoration:underline}
+#fileInput{display:none}
+
+.sel-list{display:flex;flex-direction:column;gap:2px}
+.sel-item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;background:var(--card2);border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all .2s}
+.sel-item.on{border-color:rgba(255,199,89,0.35);background:rgba(255,199,89,0.06)}
+.sel-pip{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--muted);flex-shrink:0;margin-top:5px;transition:all .2s}
+.sel-item.on .sel-pip{border-color:var(--accent);background:var(--accent);box-shadow:0 0 8px rgba(255,199,89,.45)}
+.sel-bd{flex:1}
+.sel-nm{font-size:13px;font-weight:500}
+.sel-ds{font-size:10px;color:var(--muted);margin-top:2px}
+
+.cta{width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:12px;padding:18px;color:#201404;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;margin-top:6px;transition:all .2s;box-shadow:0 6px 24px rgba(255,199,89,0.25)}
+.cta:active{transform:scale(.98)}
+.cta:disabled{opacity:.4;cursor:not-allowed}
+.loading{display:none;text-align:center;padding:40px 20px}
+.loading.on{display:block}
+.spinner{width:32px;height:32px;border:3px solid rgba(255,199,89,0.2);border-top-color:var(--accent);border-radius:50%;margin:0 auto 16px;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:12px;color:var(--muted)}
+.err-box{display:none;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.3);border-radius:10px;padding:14px;font-size:11px;color:#FF6B6B;line-height:1.7;margin-top:10px}
+.err-box.on{display:block}
+
+.res{display:none}
+.res.on{display:block;animation:rise .4s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.res-hero{background:linear-gradient(150deg,#181005,#08080A);border:1px solid rgba(255,199,89,0.3);border-radius:16px;padding:32px 20px;text-align:center;margin:16px 0;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.res-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:14px;text-transform:uppercase}
+.res-rank{font-family:var(--mono);font-size:96px;font-weight:700;color:var(--accent);line-height:1;text-shadow:0 0 40px rgba(255,199,89,0.35)}
+.res-rank-nm{font-size:16px;font-weight:800;margin-top:8px}
+.res-rank-sub{font-size:12px;color:var(--text2);line-height:1.9;margin-top:8px}
+
+.bar-row{margin-bottom:14px}
+.bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.bar-nm{font-size:12px;font-weight:500}
+.bar-pct{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.bar-track{height:5px;background:var(--border2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));transition:width 1s ease}
+
+.adv-item{padding:16px;background:var(--card2);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 10px 10px 0;margin-bottom:8px}
+.adv-num{font-family:var(--mono);font-size:8px;color:var(--accent);letter-spacing:3px;margin-bottom:6px;text-transform:uppercase}
+.adv-hd{font-size:14px;font-weight:700;margin-bottom:6px}
+.adv-tx{font-size:12px;color:var(--text2);line-height:1.9}
+
+.cta-box{background:linear-gradient(150deg,#181005,#08080A);border:1px solid rgba(255,199,89,0.3);border-radius:16px;padding:26px 20px;text-align:center;margin-top:12px}
+.cta-box-tt{font-size:14px;font-weight:800;margin-bottom:8px}
+.cta-box-ds{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.cta-box-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#201404;font-size:13px;font-weight:800;padding:13px 22px;border-radius:100px;text-decoration:none}
+
+.retry-btn{width:100%;padding:16px;background:transparent;border:1px solid rgba(255,199,89,0.3);border-radius:10px;color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:1px;margin-top:12px}
+.retry-btn:hover{background:rgba(255,199,89,0.07)}
+
+.ftr{text-align:center;padding:40px 20px 0;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px}
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="location.href='/index.html'">
+  <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>診断ツール一覧に戻る
+</button>
+<div class="hdr">
+  <div class="brand">Fit Project AI</div>
+  <h1>体型<br><span>ランク診断</span></h1>
+  <p>写真1枚と数問の質問から、<br>あなたの現在地をS〜Dでランク判定します</p>
+  <div class="sci-badge">⚗ Body Composition Based</div>
+</div>
+
+<div class="main" id="formArea">
+  <div class="card">
+    <div class="card-title">STEP 01 — 写真をアップロード(任意)</div>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-5 5M12 4l5 5"/><path d="M20 16v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3"/></svg>
+      <div class="upload-txt">タップして写真を選択</div>
+      <div class="upload-sub">全身が写った写真がおすすめです</div>
+    </div>
+    <div class="preview-wrap" id="previewWrap">
+      <img class="preview-img" id="previewImg" src="" alt="">
+      <div class="preview-change" onclick="document.getElementById('fileInput').click()">写真を変更する</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 02 — 今の体型で気になること</div>
+    <div class="sel-list" id="q1">
+      <div class="sel-item on" onclick="pick('q1',0,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">体脂肪が多い・お腹周りが気になる</div></div></div>
+      <div class="sel-item" onclick="pick('q1',1,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">痩せ型で筋肉量が少ない</div></div></div>
+      <div class="sel-item" onclick="pick('q1',2,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">筋肉はあるがメリハリがない</div></div></div>
+      <div class="sel-item" onclick="pick('q1',3,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">姿勢や左右バランスが気になる</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 03 — 直近のトレーニング頻度</div>
+    <div class="sel-list" id="q2">
+      <div class="sel-item on" onclick="pick('q2',0,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">ほぼしていない</div></div></div>
+      <div class="sel-item" onclick="pick('q2',1,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">週1〜2回</div></div></div>
+      <div class="sel-item" onclick="pick('q2',2,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">週3〜4回</div></div></div>
+      <div class="sel-item" onclick="pick('q2',3,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">週5回以上</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 04 — 食事管理の状況</div>
+    <div class="sel-list" id="q3">
+      <div class="sel-item on" onclick="pick('q3',0,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">特に管理していない</div></div></div>
+      <div class="sel-item" onclick="pick('q3',1,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">なんとなく気をつけている</div></div></div>
+      <div class="sel-item" onclick="pick('q3',2,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">カロリー・タンパク質を意識している</div></div></div>
+      <div class="sel-item" onclick="pick('q3',3,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">PFCまで細かく管理している</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 05 — 今の体型への満足度</div>
+    <div class="sel-list" id="q4">
+      <div class="sel-item on" onclick="pick('q4',0,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">全く満足していない</div></div></div>
+      <div class="sel-item" onclick="pick('q4',1,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">あまり満足していない</div></div></div>
+      <div class="sel-item" onclick="pick('q4',2,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">やや満足している</div></div></div>
+      <div class="sel-item" onclick="pick('q4',3,this)"><div class="sel-pip"></div><div class="sel-bd"><div class="sel-nm">満足している</div></div></div>
+    </div>
+  </div>
+
+  <button class="cta" id="ctaBtn" onclick="calc()">ランクを判定する →</button>
+  <div class="err-box" id="errBox"></div>
+</div>
+
+<div class="loading" id="loadingArea">
+  <div class="spinner"></div>
+  <div class="loading-txt">AIが写真と回答を分析しています...</div>
+</div>
+
+<div class="main res" id="resArea">
+  <div class="res-hero">
+    <div class="res-lbl">Your Body Rank</div>
+    <div class="res-rank" id="rRank">—</div>
+    <div class="res-rank-nm" id="rRankNm">—</div>
+    <div class="res-rank-sub" id="rRankSub">—</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">項目別スコア</div>
+    <div id="bars"></div>
+  </div>
+
+  <div id="advList"></div>
+
+  <div class="cta-box">
+    <div class="cta-box-tt">詳しい分析結果と改善プランを見る</div>
+    <div class="cta-box-ds">無料相談では、あなたのランクを踏まえた具体的な伸びしろと、最短で次のランクへ上がるための個別プランをお伝えします。</div>
+    <a class="cta-box-btn" href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank">無料相談を予約する →</a>
+  </div>
+
+  <button class="retry-btn" onclick="retry()">もう一度診断する →</button>
+</div>
+
+<div class="ftr">FIT PROJECT AI — AI × プロコーチで、続く体づくりを。</div>
+
+<script>
+const answers={q1:0,q2:0,q3:0,q4:0};
+let uploadedImage=null; // {base64, mediaType}
+
+function pick(q,i,el){
+  answers[q]=i;
+  document.querySelectorAll('#'+q+' .sel-item').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function handleFile(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const result=ev.target.result;
+    document.getElementById('previewImg').src=result;
+    document.getElementById('uploadZone').style.display='none';
+    document.getElementById('previewWrap').classList.add('on');
+    const base64=result.split(',')[1];
+    uploadedImage={base64,mediaType:file.type};
+  };
+  reader.readAsDataURL(file);
+}
+
+// ローカル計算(APIが使えない時のフォールバック)
+const rankDataFallback={
+  S:{nm:'理想体型に近いSランク',sub:'すでに高いレベルにあります。ここからは細部の作り込みで、さらに完成度を高めるフェーズです。',
+    adv:[{hd:'弱点部位のピンポイント強化',tx:'全体のバランスは整っているので、部位別の細かい伸びしろを詰めていくことで、さらに一段上の見た目に近づけます。'},{hd:'維持と攻めの切り替え',tx:'ここからは現状維持と更なる追い込みのメリハリが重要。トレーニング周期を意識した設計が効果的です。'}]},
+  A:{nm:'伸びしろがはっきりしたAランク',sub:'土台はできています。あと一歩の詰めで見た目が大きく変わる段階です。',
+    adv:[{hd:'食事の精度を上げる',tx:'トレーニングの土台はできているので、食事管理の精度を上げることで結果が加速しやすい段階です。'},{hd:'停滞しやすいポイントの見極め',tx:'このレベルからは自己流だと伸び悩みやすく、専門的な視点でのチェックが結果を左右します。'}]},
+  B:{nm:'土台作りの途中、Bランク',sub:'変化は出てきている一方、まだ仕組み化しきれていない部分があります。',
+    adv:[{hd:'トレーニングの頻度・強度の見直し',tx:'今のペースでも変化は出ますが、頻度や強度を最適化することで結果が出るスピードが大きく変わります。'},{hd:'食事管理の土台作り',tx:'感覚での管理から、数値をベースにした管理に切り替えることで停滞を防ぎやすくなります。'}]},
+  C:{nm:'これから伸びるCランク',sub:'まだ体型に変化を感じにくい段階ですが、正しい方向に進めばここからの伸びしろが一番大きいゾーンです。',
+    adv:[{hd:'何を優先するかを明確にする',tx:'情報過多で何から手をつけるべきか迷いやすい段階です。優先順位を1つに絞ることが最初の一歩になります。'},{hd:'小さな成功体験を積む',tx:'いきなり完璧を目指さず、続けられる小さな行動から始めることが、この段階では最も効果的です。'}]},
+  D:{nm:'これから始まるDランク',sub:'今はまだスタート地点ですが、それは裏を返せば最も変化を実感しやすい段階にいるということです。',
+    adv:[{hd:'仕組みから作り直す',tx:'意志力に頼らず、続けられる仕組みを最初から設計することが遠回りしない一番の近道です。'},{hd:'専門的なサポートを受ける価値が最も高い段階',tx:'ゼロからのスタートだからこそ、最初の設計を誤らないことが結果までの期間を大きく左右します。'}]},
+};
+
+function localFallback(){
+  const total=answers.q1+answers.q2+answers.q3+answers.q4;
+  let rank;
+  if(total>=10)rank='S';else if(total>=8)rank='A';else if(total>=5)rank='B';else if(total>=3)rank='C';else rank='D';
+  const r=rankDataFallback[rank];
+  return {
+    rank, rankName:r.nm, rankSub:r.sub,
+    categories:[
+      {name:'筋肉量・ボリューム',value:Math.min(100,Math.round((answers.q2/3)*70+(answers.q1===2?20:10)))},
+      {name:'引き締まり度',value:Math.min(100,Math.round((answers.q1===0?30:answers.q1===1?55:80)+(answers.q3/3)*20))},
+      {name:'バランス・姿勢',value:Math.min(100,Math.round((answers.q1===3?40:75)+(answers.q4/3)*20))},
+      {name:'食事管理の精度',value:Math.round((answers.q3/3)*100)},
+    ],
+    advice:r.adv.map(a=>({heading:a.hd,text:a.tx})),
+  };
+}
+
+async function calc(){
+  const ctaBtn=document.getElementById('ctaBtn');
+  const errBox=document.getElementById('errBox');
+  errBox.classList.remove('on');
+  ctaBtn.disabled=true;
+  document.getElementById('loadingArea').classList.add('on');
+
+  let result;
+  try{
+    const res=await fetch('/api/analyze-photo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        image:uploadedImage?uploadedImage.base64:null,
+        mediaType:uploadedImage?uploadedImage.mediaType:null,
+        answers,
+      }),
+    });
+    if(!res.ok)throw new Error('API request failed');
+    result=await res.json();
+    if(!result.rank)throw new Error('Invalid response');
+  }catch(err){
+    result=localFallback();
+    errBox.textContent='AI分析に接続できなかったため、簡易ロジックで結果を表示しています(APIキー未設定の可能性があります)。';
+    errBox.classList.add('on');
+  }
+
+  document.getElementById('loadingArea').classList.remove('on');
+  ctaBtn.disabled=false;
+  renderResult(result);
+}
+
+function renderResult(r){
+  document.getElementById('rRank').textContent=r.rank;
+  document.getElementById('rRankNm').textContent=r.rankName;
+  document.getElementById('rRankSub').textContent=r.rankSub;
+
+  document.getElementById('bars').innerHTML=r.categories.map(c=>`
+    <div class="bar-row">
+      <div class="bar-top"><span class="bar-nm">${c.name}</span><span class="bar-pct">${c.value}%</span></div>
+      <div class="bar-track"><div class="bar-fill" id="bf_${c.name}" style="width:0"></div></div>
+    </div>`).join('');
+  setTimeout(()=>r.categories.forEach(c=>{const el=document.getElementById('bf_'+c.name);if(el)el.style.width=c.value+'%'}),100);
+
+  document.getElementById('advList').innerHTML=r.advice.map((a,i)=>`
+    <div class="adv-item">
+      <div class="adv-num">Point 0${i+1}</div>
+      <div class="adv-hd">${a.heading}</div>
+      <div class="adv-tx">${a.text}</div>
+    </div>`).join('');
+
+  document.getElementById('formArea').style.display='none';
+  const res=document.getElementById('resArea');
+  res.classList.add('on');res.style.opacity=0;
+  setTimeout(()=>{res.style.transition='opacity .5s';res.style.opacity=1},10);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function retry(){
+  document.getElementById('resArea').classList.remove('on');
+  document.getElementById('formArea').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
