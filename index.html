@@ -408,6 +408,30 @@ html, body {
 .feat-list li { font-size: 11px; color: #8a8270; line-height: 1.7; display: flex; align-items: flex-start; gap: 7px; }
 .feat-list li::before { content: '✓'; color: var(--pg); font-weight: 900; flex-shrink: 0; }
 
+.open-tool-btn {
+  display: none;
+  margin-top: 10px;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #4ADE80, #16A34A);
+  color: #06210F;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 9px 16px;
+  border-radius: 100px;
+  text-decoration: none;
+  width: fit-content;
+  box-shadow: 0 6px 18px rgba(74,222,128,0.3);
+}
+.open-tool-btn.soon {
+  background: var(--card2);
+  color: #6a6252;
+  border: 1px dashed rgba(255,199,89,0.3);
+  box-shadow: none;
+  cursor: default;
+}
+
 .pass-hint { font-size: 10px; color: #6a6252; line-height: 1.6; margin-bottom: 6px; }
 .pass-mini { display: flex; gap: 6px; margin-top: 4px; }
 .pass-mini-input {
@@ -693,6 +717,7 @@ footer strong { color: #6060a0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
             無料相談でアンロック
           </a>
+          <a class="open-tool-btn" id="openTool01" href="tool01_rank.html">ツールを開く →</a>
         </div>
       </div>
 
@@ -726,6 +751,7 @@ footer strong { color: #6060a0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
             無料相談でアンロック
           </a>
+          <a class="open-tool-btn" id="openTool02" href="tool02_continue.html">ツールを開く →</a>
         </div>
       </div>
 
@@ -760,6 +786,7 @@ footer strong { color: #6060a0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
             無料相談でアンロック
           </a>
+          <a class="open-tool-btn" id="openTool03" href="tool03_protein.html">ツールを開く →</a>
         </div>
       </div>
 
@@ -794,6 +821,7 @@ footer strong { color: #6060a0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
             無料相談でアンロック
           </a>
+          <a class="open-tool-btn" id="openTool04" href="tool04_meal.html">ツールを開く →</a>
         </div>
       </div>
 
@@ -828,6 +856,7 @@ footer strong { color: #6060a0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
             無料相談でアンロック
           </a>
+          <a class="open-tool-btn" id="openTool05" href="tool05_training.html">ツールを開く →</a>
         </div>
       </div>
 
@@ -870,6 +899,10 @@ function checkPassCard(id) {
       if (preview) preview.style.filter = 'none';
       const lock = card.querySelector('.lock-badge');
       if (lock) lock.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v2a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2H9V6a3 3 0 016 0v1h2V6a5 5 0 00-5-5z"/></svg>UNLOCKED';
+      const unlockBtn = card.querySelector('.unlock-btn');
+      if (unlockBtn) unlockBtn.style.display = 'none';
+      const openBtn = document.getElementById('openTool' + id);
+      if (openBtn) openBtn.style.display = 'inline-flex';
     }
   } else {
     msg.textContent = '暗証番号が正しくありません';
