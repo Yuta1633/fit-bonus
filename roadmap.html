@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ロードマップを選ぶ｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  background: #F5F2EA;
+  color: #1A1A1E;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.mono { font-family: 'Space Mono', monospace; }
+body::before {
+  content: '';
+  position: fixed;
+  width: 640px; height: 640px;
+  background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%);
+  top: -160px; right: -160px; pointer-events: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 64px 20px 44px;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #9A7E1E;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid rgba(212,175,55,0.35);
+  border-radius: 100px;
+  padding: 7px 18px;
+  margin-bottom: 26px;
+}
+.hero h1 {
+  font-weight: 900; font-size: clamp(26px, 6.5vw, 40px);
+  line-height: 1.4; letter-spacing: -0.01em; color: #16161A; margin-bottom: 18px;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, #C79A2E, #9A7E1E);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero p { font-size: 13px; color: #6A6A62; line-height: 1.9; font-weight: 400; margin-bottom: 32px; }
+
+.stats-row {
+  display: flex;
+  border: 1px solid #E4DFCC;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(154,126,30,0.08);
+}
+.stat-item { flex: 1; padding: 18px 12px; text-align: center; border-right: 1px solid #E4DFCC; }
+.stat-item:last-child { border-right: none; }
+.stat-n { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 24px; color: #9A7E1E; }
+.stat-l { font-size: 9px; color: #8A8A82; letter-spacing: 0.06em; margin-top: 4px; }
+
+.wrap { max-width: 620px; margin: 0 auto; padding: 44px 20px 72px; position: relative; z-index: 1; }
+.list { display: flex; flex-direction: column; gap: 14px; }
+
+.rm-card {
+  display: block;
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid #E9E4D4;
+  border-radius: 16px;
+  padding: 24px 24px 22px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 2px 10px rgba(30,20,10,0.03);
+}
+.rm-card:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(30,20,10,0.1); border-color: #D4AF37; }
+
+.rm-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.rm-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+  background: linear-gradient(150deg, #FBF3DC, #F3E6BC);
+}
+.rm-free-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: linear-gradient(135deg, #2ECC71, #16A34A);
+  color: #fff; font-size: 10px; font-weight: 800;
+  padding: 6px 12px; border-radius: 100px;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 12px rgba(46,204,113,0.35);
+  flex-shrink: 0;
+}
+.rm-free-badge svg { width: 11px; height: 11px; fill: #fff; }
+
+.rm-title { font-size: 17px; font-weight: 900; color: #16161A; margin-bottom: 8px; line-height: 1.4; }
+.rm-desc { font-size: 12px; color: #7A786E; line-height: 1.85; font-weight: 400; margin-bottom: 16px; }
+.rm-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 800; color: #9A7E1E;
+}
+.rm-cta svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.4; transition: transform 0.2s; }
+.rm-card:hover .rm-cta svg { transform: translateX(4px); }
+
+.bottom-note {
+  text-align: center;
+  margin-top: 32px;
+  padding: 24px;
+  background: linear-gradient(150deg, #1E1A0E, #16161A);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+.bottom-note-icon { font-size: 22px; margin-bottom: 8px; }
+.bottom-note p { color: #F0EAD6; font-size: 12px; letter-spacing: 0.02em; line-height: 1.9; }
+.bottom-note strong {
+  background: linear-gradient(135deg, #F0D060, #D4AF37);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-size: 14px;
+}
+
+footer {
+  text-align: center; padding: 30px 20px; color: #A8A398; font-size: 10px;
+  letter-spacing: 0.05em; position: relative; z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="eyebrow">★ Fit Project AI — Choose Your Roadmap</div>
+  <h1>あなたに近いものを選んで<br><em>無料</em>でロードマップを作成</h1>
+  <p>無料の個別相談の中で、あなた専用のロードマップをその場で作成します。</p>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-n">5</div><div class="stat-l">種類のロードマップ</div></div>
+    <div class="stat-item"><div class="stat-n">¥0</div><div class="stat-l">参加費用</div></div>
+    <div class="stat-item"><div class="stat-n">60分</div><div class="stat-l">目安の相談時間</div></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="list">
+
+    <a class="rm-card" href="https://docs.google.com/forms/d/e/1FAIpQLScU3ZWj6NeVOM9YSIK2-hGehvoMYc9_NdYwNIVn9lxvliTBAg/viewform?usp=pp_url&entry.200245230=%E7%84%A1%E6%96%99%E7%9B%B8%E8%AB%87" target="_blank">
+      <div class="rm-top">
+        <div class="rm-icon">💬</div>
+        <div class="rm-free-badge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>完全無料</div>
+      </div>
+      <div class="rm-title">まずは気軽に相談する</div>
+      <div class="rm-desc">当てはまるものがまだ分からない方はこちら。状況を伺いながら方向性を一緒に見つけます。</div>
+      <div class="rm-cta">この内容で予約する<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="rm-card" href="https://docs.google.com/forms/d/e/1FAIpQLScU3ZWj6NeVOM9YSIK2-hGehvoMYc9_NdYwNIVn9lxvliTBAg/viewform?usp=pp_url&entry.200245230=%E3%82%AC%E3%83%AA%E3%82%AC%E3%83%AA%E5%8D%92%E6%A5%AD%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97%E4%BD%9C%E6%88%90%E4%BC%9A" target="_blank">
+      <div class="rm-top">
+        <div class="rm-icon">✨</div>
+        <div class="rm-free-badge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>完全無料</div>
+      </div>
+      <div class="rm-title">ガリガリ卒業ロードマップ作成会</div>
+      <div class="rm-desc">細身の体型から、理想の体へ最短で近づくロードマップを個別に作成します。</div>
+      <div class="rm-cta">この内容で予約する<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="rm-card" href="https://docs.google.com/forms/d/e/1FAIpQLScU3ZWj6NeVOM9YSIK2-hGehvoMYc9_NdYwNIVn9lxvliTBAg/viewform?usp=pp_url&entry.200245230=%E5%AE%B6%E3%83%88%E3%83%AC%E9%99%90%E5%AE%9A%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97%E4%BD%9C%E6%88%90%E4%BC%9A" target="_blank">
+      <div class="rm-top">
+        <div class="rm-icon">🏠</div>
+        <div class="rm-free-badge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>完全無料</div>
+      </div>
+      <div class="rm-title">家トレ限定ロードマップ作成会</div>
+      <div class="rm-desc">ジムに通わず、自宅だけで結果を出すための個別ロードマップを作成します。</div>
+      <div class="rm-cta">この内容で予約する<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="rm-card" href="https://docs.google.com/forms/d/e/1FAIpQLScU3ZWj6NeVOM9YSIK2-hGehvoMYc9_NdYwNIVn9lxvliTBAg/viewform?usp=pp_url&entry.200245230=%E8%84%82%E8%82%AA%E7%87%83%E7%84%BC%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97%E4%BD%9C%E6%88%90%E4%BC%9A" target="_blank">
+      <div class="rm-top">
+        <div class="rm-icon">🔥</div>
+        <div class="rm-free-badge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>完全無料</div>
+      </div>
+      <div class="rm-title">脂肪燃焼ロードマップ作成会</div>
+      <div class="rm-desc">停滞の原因を特定し、理想の体型へ近づくための個別ロードマップを作成します。</div>
+      <div class="rm-cta">この内容で予約する<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="rm-card" href="https://docs.google.com/forms/d/e/1FAIpQLScU3ZWj6NeVOM9YSIK2-hGehvoMYc9_NdYwNIVn9lxvliTBAg/viewform?usp=pp_url&entry.200245230=%E9%A3%9F%E4%BA%8B%E8%A8%AD%E8%A8%88%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97%E4%BD%9C%E6%88%90%E4%BC%9A" target="_blank">
+      <div class="rm-top">
+        <div class="rm-icon">🍽</div>
+        <div class="rm-free-badge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>完全無料</div>
+      </div>
+      <div class="rm-title">食事設計ロードマップ作成会</div>
+      <div class="rm-desc">生活リズムに合わせた、無理なく続く食事設計を個別に作成します。</div>
+      <div class="rm-cta">この内容で予約する<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+  </div>
+
+  <div class="bottom-note">
+    <div class="bottom-note-icon">🎁</div>
+    <p>どのロードマップも<br><strong>完全無料</strong>でご案内しています。料金は一切発生しません。</p>
+  </div>
+</div>
+
+<footer>FIT PROJECT AI — あなただけの正解を仕組みにして、最短で理想の体へ</footer>
+
+</body>
+</html>
