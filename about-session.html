@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5GPZQ5K4RM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5GPZQ5K4RM');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無料相談で何をするか｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  background: #F5F2EA;
+  color: #1A1A1E;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.mono { font-family: 'Space Mono', monospace; }
+body::before {
+  content: '';
+  position: fixed;
+  width: 640px; height: 640px;
+  background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%);
+  top: -160px; right: -160px; pointer-events: none;
+}
+
+.hero { text-align: center; padding: 60px 20px 40px; max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #9A7E1E;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid rgba(212,175,55,0.35);
+  border-radius: 100px;
+  padding: 7px 18px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-weight: 900; font-size: clamp(24px, 6vw, 34px);
+  line-height: 1.5; letter-spacing: -0.01em; color: #16161A; margin-bottom: 16px;
+}
+.hero p { font-size: 13px; color: #6A6A62; line-height: 1.9; font-weight: 400; }
+
+.wrap { max-width: 600px; margin: 0 auto; padding: 20px 20px 0; position: relative; z-index: 1; }
+
+.sec-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #9A7E1E; margin-bottom: 12px;
+}
+
+.flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 48px; }
+.flow-step { display: flex; gap: 18px; position: relative; padding-bottom: 32px; }
+.flow-step:last-child { padding-bottom: 0; }
+.flow-step::before {
+  content: ''; position: absolute; left: 19px; top: 44px; bottom: 0; width: 1px;
+  background: #DDD6C0;
+}
+.flow-step:last-child::before { display: none; }
+.flow-num {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(150deg, #F0D060, #D4AF37);
+  color: #201404; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+}
+.flow-body { flex: 1; padding-top: 4px; }
+.flow-title { font-size: 15px; font-weight: 800; color: #16161A; margin-bottom: 6px; }
+.flow-desc { font-size: 12px; color: #6A6A62; line-height: 1.85; }
+
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.info-card { background: #FFFFFF; border: 1px solid #E9E4D4; border-radius: 14px; padding: 18px; }
+.info-n { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: #9A7E1E; margin-bottom: 4px; }
+.info-l { font-size: 11px; color: #6A6A62; line-height: 1.6; }
+
+.solve-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+.solve-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #FFFFFF; border: 1px solid #E9E4D4; border-radius: 12px; padding: 15px 18px;
+}
+.solve-mark {
+  width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; margin-top: 1px;
+  background: rgba(212,175,55,0.15); color: #9A7E1E;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+}
+.solve-text { font-size: 12.5px; color: #2A2A24; font-weight: 500; line-height: 1.75; }
+.get-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+.get-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #FFFFFF; border: 1px solid #E9E4D4; border-radius: 12px; padding: 16px 18px;
+}
+.get-check {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: linear-gradient(135deg, #2ECC71, #16A34A);
+  display: flex; align-items: center; justify-content: center;
+}
+.get-check svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 3; }
+.get-text { font-size: 13px; color: #2A2A24; font-weight: 500; line-height: 1.7; }
+
+.reassure {
+  background: linear-gradient(150deg, #1E1A0E, #16161A);
+  border-radius: 16px;
+  padding: 26px 24px;
+  margin-bottom: 48px;
+  text-align: center;
+}
+.reassure-icon { font-size: 22px; margin-bottom: 10px; }
+.reassure p { color: #E8E6DA; font-size: 12px; line-height: 2; }
+.reassure strong {
+  background: linear-gradient(135deg, #F0D060, #D4AF37);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.cta-block { text-align: center; padding-bottom: 64px; }
+.cta-title { font-size: 16px; font-weight: 900; color: #16161A; margin-bottom: 20px; line-height: 1.6; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #F0D060, #D4AF37);
+  color: #201404; font-size: 14px; font-weight: 800;
+  padding: 16px 30px; border-radius: 100px; text-decoration: none;
+  box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+}
+
+footer {
+  text-align: center; padding: 30px 20px; color: #A8A398; font-size: 10px;
+  letter-spacing: 0.05em; position: relative; z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="eyebrow">★ Fit Project AI — 無料相談・ロードマップ作成会</div>
+  <h1>無料相談で、<br>実際に何をするのか</h1>
+  <p>「相談したら何をされるか分からない」という方のために、当日の流れを先にお伝えします。</p>
+</section>
+
+<div class="wrap">
+  <div class="sec-label">Flow — 当日の流れ</div>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-body">
+        <div class="flow-title">現状のヒアリング</div>
+        <div class="flow-desc">今の体型・生活リズム・これまで試してきたこと・悩んでいることを伺います。まずはあなたの状況を理解するところからです。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-body">
+        <div class="flow-title">現在地の分析</div>
+        <div class="flow-desc">診断ツールを使っていれば、その結果も踏まえて今の状態を一緒に整理します。何がボトルネックになっているかを明確にします。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-body">
+        <div class="flow-title">ロードマップの作成</div>
+        <div class="flow-desc">ヒアリング内容をもとに、あなた専用のロードマップ(トレーニング・食事・生活習慣の方向性)をその場で組み立てます。</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-body">
+        <div class="flow-title">今後の進め方のご案内</div>
+        <div class="flow-desc">一人で進める場合のポイントと、仕組み化されたサポート(Fit Project AI)を使う場合の違いをご説明します。合わなければ、それで終了でも問題ありません。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">Solve — こんな課題を解決します</div>
+  <div class="solve-list">
+    <div class="solve-item"><div class="solve-mark">01</div><div class="solve-text">3ヶ月間頑張っても体が変わらず、鏡を見るたびにイライラする</div></div>
+    <div class="solve-item"><div class="solve-mark">02</div><div class="solve-text">効果の分からないプロテインやサプリに、お金だけが溶けていく</div></div>
+    <div class="solve-item"><div class="solve-mark">03</div><div class="solve-text">また三日坊主で終わった自分に、毎回うんざりしている</div></div>
+    <div class="solve-item"><div class="solve-mark">04</div><div class="solve-text">自宅で何をすればいいか分からず、時間だけが無駄に過ぎていく</div></div>
+    <div class="solve-item"><div class="solve-mark">05</div><div class="solve-text">薄着になるたび、細い腕や胸板を見られるのが恥ずかしい</div></div>
+    <div class="solve-item"><div class="solve-mark">06</div><div class="solve-text">このやり方で合っているのか分からないまま、時間だけが過ぎていく不安</div></div>
+  </div>
+
+  <div class="sec-label">Details — 相談の詳細</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-n">30〜60分</div>
+      <div class="info-l">目安の所要時間</div>
+    </div>
+    <div class="info-card">
+      <div class="info-n">¥0</div>
+      <div class="info-l">参加費用(完全無料)</div>
+    </div>
+    <div class="info-card">
+      <div class="info-n">Meet / Zoom</div>
+      <div class="info-l">オンライン通話で実施</div>
+    </div>
+    <div class="info-card">
+      <div class="info-n">1対1</div>
+      <div class="info-l">個別形式</div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:#8A8A82;line-height:1.9;margin-bottom:48px;">
+    ※ 基本はGoogle MeetまたはZoomでの実施です。ご希望があれば、他のツールなど柔軟に対応しますので、お気軽にご相談ください。
+  </p>
+
+  <div class="sec-label">What You Get — 相談後に手元に残るもの</div>
+  <div class="get-list">
+    <div class="get-item">
+      <div class="get-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="get-text">あなた専用のロードマップ(トレーニング・食事の方向性)</div>
+    </div>
+    <div class="get-item">
+      <div class="get-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="get-text">診断ツールを使っていれば、その結果の詳しい解説</div>
+    </div>
+    <div class="get-item">
+      <div class="get-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="get-text">今の自分に何が必要か、という現在地の整理</div>
+    </div>
+  </div>
+
+  <div class="reassure">
+    <div class="reassure-icon">🤝</div>
+    <p>この相談は、まず<strong>あなたの状況を理解すること</strong>を目的にしています。<br>最後にサービスのご案内をすることもありますが、合わなければ無理にお勧めすることはありません。</p>
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-title">流れが分かったところで、<br>気になるロードマップを選んでみてください。</div>
+    <a class="cta-btn" href="roadmap.html">ロードマップを選ぶ →</a>
+  </div>
+</div>
+
+<footer>FIT PROJECT AI — あなただけの正解を仕組みにして、最短で理想の体へ</footer>
+
+</body>
+</html>
