@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プロテイン摂取量計算｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080A;--card:#0F0F14;--card2:#14141A;--border:#1E1E28;--border2:#252530;
+  --accent:#FF3B5C;--accent2:#FF6B84;--accent3:#C0203A;
+  --green:#10B981;--amber:#F59E0B;--blue:#3B82F6;
+  --text:#F0EDF5;--text2:#C0BCCC;--muted:#5A566A;
+  --mono:'Space Mono',monospace;--sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:72px}
+.back-btn{position:fixed;top:12px;left:12px;z-index:9999;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(15,15,20,0.85);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s}
+.back-btn:hover{background:rgba(255,59,92,0.15);border-color:var(--accent)}
+.back-btn svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+.hdr{background:linear-gradient(160deg,#0A0A10 0%,#0F080C 100%);padding:44px 20px 32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,59,92,0.1) 0%,transparent 65%);border-radius:50%}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent3),var(--accent),var(--accent3),transparent)}
+.brand{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;margin-bottom:14px;text-transform:uppercase}
+.hdr h1{font-size:28px;font-weight:900;line-height:1.2;margin-bottom:8px}
+.hdr h1 span{color:var(--accent)}
+.hdr p{font-size:12px;color:var(--muted);line-height:1.7}
+.sci-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:5px 12px;background:rgba(255,59,92,0.07);border:1px solid rgba(255,59,92,0.22);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.main{padding:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,59,92,0.18),transparent)}
+.card-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.tog-pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.tog{background:var(--card2);padding:12px;text-align:center;cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;color:var(--muted)}
+.tog.on{background:rgba(255,59,92,0.1);color:var(--accent)}
+.wt-disp{text-align:center;padding:20px 0 14px}
+.wt-num{font-family:var(--mono);font-size:64px;font-weight:700;color:var(--text);line-height:1;letter-spacing:-2px}
+.wt-kg{font-family:var(--mono);font-size:14px;color:var(--muted);margin-left:4px}
+input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--border2);border-radius:1px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 14px rgba(255,59,92,0.45),0 2px 6px rgba(0,0,0,.5)}
+.rng-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:6px}
+.age-row{display:flex;gap:5px;margin-top:18px}
+.age-btn{flex:1;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s}
+.age-btn.on{border-color:var(--accent);background:rgba(255,59,92,0.09)}
+.age-btn .age-num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted);transition:color .2s}
+.age-btn.on .age-num{color:var(--accent)}
+.age-btn .age-lbl{font-size:8px;color:var(--muted);margin-top:2px;display:block}
+.age-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;padding:10px 12px;background:rgba(255,255,255,0.025);border-radius:8px;border-left:2px solid var(--accent)}
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.goal-card{background:var(--card2);border:1.5px solid var(--border2);border-radius:12px;padding:16px 12px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.goal-card.on{border-color:rgba(255,59,92,0.4);background:rgba(255,59,92,0.07)}
+.goal-card.on::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent)}
+.goal-em{font-size:18px;display:block;margin-bottom:6px}
+.goal-nm{font-size:12px;font-weight:700}
+.goal-rng{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px}
+.act-list{display:flex;flex-direction:column;gap:2px}
+.act-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card2);border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all .2s}
+.act-item.on{border-color:rgba(255,59,92,0.3);background:rgba(255,59,92,0.06)}
+.act-pip{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--muted);flex-shrink:0;transition:all .2s}
+.act-item.on .act-pip{border-color:var(--accent);background:var(--accent);box-shadow:0 0 8px rgba(255,59,92,.45)}
+.act-bd{flex:1}
+.act-nm{font-size:13px;font-weight:500}
+.act-ds{font-size:10px;color:var(--muted);margin-top:2px}
+.act-x{font-family:var(--mono);font-size:11px;color:var(--accent)}
+
+.mc-row{display:flex;gap:6px}
+.mc-btn{flex:1;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:12px 4px;text-align:center;cursor:pointer;transition:all .2s}
+.mc-btn.on{border-color:var(--accent);background:rgba(255,59,92,0.09)}
+.mc-btn-num{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--muted);transition:color .2s}
+.mc-btn.on .mc-btn-num{color:var(--accent)}
+.mc-btn-lbl{font-size:9px;color:var(--muted);margin-top:3px;display:block}
+.mc-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;padding:10px 12px;background:rgba(255,255,255,0.025);border-radius:8px;border-left:2px solid var(--border2)}
+
+.cta{width:100%;background:var(--accent);border:none;border-radius:12px;padding:18px;color:#fff;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;margin-top:6px;transition:all .2s;box-shadow:0 6px 24px rgba(255,59,92,0.25)}
+.cta:active{transform:scale(.98)}
+.res{display:none}
+.res.on{display:block;animation:rise .4s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.res-hero{background:linear-gradient(150deg,#120408,#08080A);border:1px solid rgba(255,59,92,0.25);border-radius:16px;padding:32px 20px;text-align:center;margin:16px 0;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.res-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:12px;text-transform:uppercase}
+.res-nums{display:flex;align-items:baseline;justify-content:center;gap:8px}
+.res-big{font-family:var(--mono);font-size:64px;font-weight:700;color:var(--accent);line-height:1;letter-spacing:-2px}
+.res-sep{font-size:28px;color:var(--muted)}
+.res-unit{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.res-basis{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:12px;letter-spacing:.5px}
+.res-age-note{margin-top:10px;padding:10px 14px;background:rgba(255,59,92,0.08);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.7;text-align:left}
+
+.meal-dyn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.meal-mc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:calc(33% - 8px)}
+.meal-mc-t{font-size:10px;color:var(--muted);margin-bottom:4px;line-height:1.4}
+.meal-mc-g{font-family:var(--mono);font-size:26px;color:var(--text);font-weight:700}
+.meal-mc-u{font-family:var(--mono);font-size:9px;color:var(--muted)}
+.meal-mc-d{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.5}
+
+.t-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.t-label{font-size:11px;color:var(--text2);flex:1;min-width:0;line-height:1.5}
+.t-bar-bg{width:80px;height:5px;background:var(--border2);border-radius:3px;overflow:hidden;flex-shrink:0}
+.t-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));transition:width .8s ease}
+.t-g{font-family:var(--mono);font-size:11px;color:var(--accent);width:32px;text-align:right;flex-shrink:0}
+
+.food-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.food-row:last-child{border-bottom:none}
+.food-em{font-size:20px}
+.food-bd{flex:1}
+.food-nm{font-size:12px;font-weight:500}
+.food-nt{font-size:10px;color:var(--muted);margin-top:2px}
+.food-pg{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
+.food-pu{font-size:9px;color:var(--muted)}
+.ins-box{background:rgba(255,59,92,0.06);border:1px solid rgba(255,59,92,0.18);border-radius:12px;padding:18px;margin-bottom:10px}
+.ins-lbl{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.ins-box p{font-size:12px;color:var(--text2);line-height:1.9}
+.sci-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.sci-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.sci-box p{font-size:11px;color:var(--muted);line-height:1.9}
+.ftr{text-align:center;padding:40px 20px 0;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px}
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="location.href='/index.html'">
+  <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>診断ツール一覧に戻る
+</button>
+<div class="hdr">
+  <div class="brand">Fit Project AI</div>
+  <h1>プロテイン<br><span>摂取量計算</span></h1>
+  <p>性別・体重・年齢・目標から<br>科学的に最適なタンパク質量を算出</p>
+  <div class="sci-badge">⚗ ISSN 2017 · ACSM guidelines</div>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="card-title">STEP 01 — 基本情報</div>
+    <div class="tog-pair">
+      <div class="tog on" id="gM" onclick="setG('male',this)">👨 男性</div>
+      <div class="tog" id="gF" onclick="setG('female',this)">👩 女性</div>
+    </div>
+    <div class="wt-disp">
+      <span class="wt-num" id="wv">65</span><span class="wt-kg">kg</span>
+    </div>
+    <input type="range" id="ws" min="40" max="130" value="65" oninput="document.getElementById('wv').textContent=this.value">
+    <div class="rng-marks"><span>40</span><span>60</span><span>80</span><span>100</span><span>120</span></div>
+    <div class="age-row">
+      <div class="age-btn" id="a0" onclick="setAge(0,this)"><div class="age-num">20代</div><span class="age-lbl">〜29歳</span></div>
+      <div class="age-btn on" id="a1" onclick="setAge(1,this)"><div class="age-num">30代</div><span class="age-lbl">30〜39</span></div>
+      <div class="age-btn" id="a2" onclick="setAge(2,this)"><div class="age-num">40代</div><span class="age-lbl">40〜49</span></div>
+      <div class="age-btn" id="a3" onclick="setAge(3,this)"><div class="age-num">50代</div><span class="age-lbl">50〜59</span></div>
+      <div class="age-btn" id="a4" onclick="setAge(4,this)"><div class="age-num">60代+</div><span class="age-lbl">60歳〜</span></div>
+    </div>
+    <div class="age-note" id="ageNote">30代：筋合成効率がやや低下し始める年代。摂取タイミングの意識が重要になります。</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 02 — 目標</div>
+    <div class="goal-grid" style="grid-template-columns:1fr 1fr">
+      <div class="goal-card on" onclick="setGoal(this,'fat',2.3,2.6)"><span class="goal-em">🔥</span><div class="goal-nm">脂肪を落としたい</div><div class="goal-rng">2.3〜2.6 g/kg</div></div>
+      <div class="goal-card" onclick="setGoal(this,'muscle',2.0,2.2)"><span class="goal-em">💪</span><div class="goal-nm">筋肉をつけたい</div><div class="goal-rng">2.0〜2.2 g/kg</div></div>
+      <div class="goal-card" onclick="setGoal(this,'energy',1.6,1.8)"><span class="goal-em">⚡</span><div class="goal-nm">体力を上げたい</div><div class="goal-rng">1.6〜1.8 g/kg</div></div>
+      <div class="goal-card" onclick="setGoal(this,'recovery',1.4,1.6)"><span class="goal-em">🌿</span><div class="goal-nm">不調を改善したい</div><div class="goal-rng">1.4〜1.6 g/kg</div></div>
+      <div class="goal-card" onclick="setGoal(this,'aesthetics',1.8,2.0)"><span class="goal-em">✨</span><div class="goal-nm">体型を整えたい</div><div class="goal-rng">1.8〜2.0 g/kg</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 03 — 活動レベル</div>
+    <div class="act-list">
+      <div class="act-item" onclick="setAct(this,1.0)"><div class="act-pip"></div><div class="act-bd"><div class="act-nm">座り仕事中心</div><div class="act-ds">デスクワーク・ほぼ運動なし</div></div><div class="act-x">×1.0</div></div>
+      <div class="act-item on" onclick="setAct(this,1.1)"><div class="act-pip"></div><div class="act-bd"><div class="act-nm">軽い運動あり</div><div class="act-ds">週1〜2回ウォーキング程度</div></div><div class="act-x">×1.1</div></div>
+      <div class="act-item" onclick="setAct(this,1.2)"><div class="act-pip"></div><div class="act-bd"><div class="act-nm">週3〜4回トレーニング</div><div class="act-ds">筋トレ・ランニングなど</div></div><div class="act-x">×1.2</div></div>
+      <div class="act-item" onclick="setAct(this,1.35)"><div class="act-pip"></div><div class="act-bd"><div class="act-nm">週5〜6回ハードに</div><div class="act-ds">競技スポーツ・本格的な筋トレ</div></div><div class="act-x">×1.35</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 04 — 1日の食事回数</div>
+    <div class="mc-row">
+      <div class="mc-btn" id="mc2" onclick="setMeals(2,this)"><div class="mc-btn-num">2</div><span class="mc-btn-lbl">回/日</span></div>
+      <div class="mc-btn on" id="mc3" onclick="setMeals(3,this)"><div class="mc-btn-num">3</div><span class="mc-btn-lbl">回/日</span></div>
+      <div class="mc-btn" id="mc4" onclick="setMeals(4,this)"><div class="mc-btn-num">4</div><span class="mc-btn-lbl">回/日</span></div>
+      <div class="mc-btn" id="mc5" onclick="setMeals(5,this)"><div class="mc-btn-num">5</div><span class="mc-btn-lbl">回/日</span></div>
+    </div>
+    <div class="mc-note" id="mcNote">3食：最も一般的なパターン。各食でロイシン閾値（2〜3g）を超える量を摂ることが重要です。</div>
+  </div>
+
+  <button class="cta" onclick="calc()">計算する →</button>
+
+  <div class="res" id="res">
+    <div class="res-hero">
+      <div class="res-lbl">Daily Protein Target</div>
+      <div class="res-nums"><span class="res-big" id="rn1">—</span><span class="res-sep">–</span><span class="res-big" id="rn2">—</span><span class="res-unit">g</span></div>
+      <div class="res-basis" id="rb"></div>
+      <div class="res-age-note" id="rAgeNote"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title" id="meal-grid-title">食事別タンパク質配分</div>
+      <div class="meal-dyn" id="meal-grid"></div>
+      <p style="font-size:10px;color:var(--muted);line-height:1.7">1回あたり20〜40gが筋タンパク合成の最適レンジ（Moore et al., 2009）</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title">タイミング配分（比率）</div>
+      <div id="trows"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title">推奨食材</div>
+      <div id="foods"></div>
+    </div>
+
+    <div class="ins-box">
+      <div class="ins-lbl">Personal Insight</div>
+      <p id="ins"></p>
+    </div>
+    <div class="sci-box">
+      <div class="sci-lbl">Scientific Reference</div>
+      <p id="sci"></p>
+    </div>
+  </div>
+</div>
+<div class="ftr">FIT PROJECT AI — AI × プロコーチで、続く体づくりを。</div>
+
+<script>
+let gender='male', ageIdx=1, gkey='fat', gmin=2.3, gmax=2.6, act=1.1, mealCount=3;
+
+const ageData=[
+  {mul:1.0, note:'20代：筋タンパク合成能力がピーク。多少の誤差は回復力でカバーできます。',rNote:'20代は筋合成感受性が最も高い時期。基準量を守ることで十分な効果が期待できます。'},
+  {mul:1.05, note:'30代：筋合成効率がやや低下し始める年代。摂取タイミングの意識が重要になります。',rNote:'30代は「いつ食べるか」が効いてくる年代。特に運動後30分以内のタンパク質補給を意識しましょう。'},
+  {mul:1.12, note:'40代：筋タンパク合成の感受性が低下（アナボリック抵抗）。基準より多めに必要です。',rNote:'40代はアナボリック抵抗（筋合成の鈍化）が始まります。1回30〜40gを目安に摂取量を底上げしましょう。'},
+  {mul:1.20, note:'50代：サルコペニア（加齢性筋肉減少）予防が最優先。基準+20%が目安。',rNote:'50代はサルコペニア予防が重要課題。特に就寝前のカゼイン（牛乳・チーズ）が夜間の筋分解防止に有効です。'},
+  {mul:1.28, note:'60代以上：筋肉の維持・機能的強度のためにより多くのタンパク質が必要です。（Bauer et al., 2013）',rNote:'60代以上は同じ量を食べても筋合成に使われる割合が低下します。こまめな分割摂取（4〜5回/日）が特に重要です。'},
+];
+
+const mcNotes={
+  2:'2食：16:8断食などに対応。1回あたりの量が多くなるため、消化しやすいホエイや鶏肉を中心に。ロイシン閾値を超える量を確保することが重要です。',
+  3:'3食：最も一般的なパターン。各食でロイシン閾値（2〜3g）を超える量を摂ることが重要です。',
+  4:'4食：筋肥大・減量どちらにも適した頻度。補食を加えることで血糖値を安定させ、筋分解を防ぎます。',
+  5:'5食：本格的なトレーニーや競技者向け。少量頻回で消化への負担を分散しつつ、1日を通じて合成を最大化します。',
+};
+
+const mealTemplates={
+  2:{
+    fat:        [{l:'🌅 朝食（多め）',d:'朝に最大カロリーで脂肪燃焼を促進',r:55},{l:'🌙 夕食（少なめ）',d:'BMAL1活性化の21時前に終わらせる',r:45}],
+    muscle:     [{l:'🌅 朝食',d:'筋合成基盤を構築',r:40},{l:'🌙 夕食',d:'就寝前カゼインと組み合わせ最大化',r:60}],
+    energy:     [{l:'🌅 朝食（しっかり）',d:'体力向上には朝の炭水化物が重要',r:50},{l:'🌙 夕食',d:'翌日の活動に備えてしっかり回復食',r:50}],
+    recovery:   [{l:'🌅 朝食',d:'消化に優しいものから1日をスタート',r:45},{l:'🌙 夕食',d:'抗炎症食材（魚・野菜）を意識して',r:55}],
+    aesthetics: [{l:'🌅 朝食',d:'代謝スイッチON・体型維持の基盤',r:45},{l:'🌙 夕食',d:'脂質は低め・タンパク質しっかり',r:55}],
+  },
+  3:{
+    fat:        [{l:'🌅 朝食（最大）',d:'満腹感で間食防止・代謝促進',r:40},{l:'☀️ 昼食',d:'血糖値の急上昇を抑制',r:35},{l:'🌙 夕食（軽め）',d:'就寝に向けて少なめに',r:25}],
+    muscle:     [{l:'🌅 朝食',d:'1日の筋合成基盤を作る',r:30},{l:'☀️ 昼食',d:'継続的な栄養供給',r:35},{l:'🌙 夕食',d:'就寝前のタンパク確保',r:35}],
+    energy:     [{l:'🌅 朝食',d:'エネルギー代謝のスイッチを入れる',r:35},{l:'☀️ 昼食',d:'午後のパフォーマンスを支える主食',r:35},{l:'🌙 夕食',d:'回復食・タンパク質＋複合炭水化物',r:30}],
+    recovery:   [{l:'🌅 朝食',d:'消化に優しいタンパク質（卵・豆腐）',r:30},{l:'☀️ 昼食',d:'栄養バランスを意識した主食',r:35},{l:'🌙 夕食',d:'抗炎症食材・よく噛んでゆっくり食べる',r:35}],
+    aesthetics: [{l:'🌅 朝食',d:'代謝を上げる高タンパク朝食',r:35},{l:'☀️ 昼食',d:'炭水化物は昼に集中させる',r:35},{l:'🌙 夕食（低糖質）',d:'夜は糖質を抑えてタンパク質中心に',r:30}],
+  },
+  4:{
+    fat:        [{l:'🌅 朝食（最大）',d:'1日最大の食事で代謝を高める',r:35},{l:'☀️ 昼食',d:'血糖値管理・午後のパフォーマンス',r:30},{l:'🍎 補食',d:'筋分解防止・夕食前の暴食防止',r:15},{l:'🌙 夕食（軽め）',d:'BMAL1活性前に控えめに',r:20}],
+    muscle:     [{l:'🌅 朝食',d:'筋合成の基盤',r:25},{l:'☀️ 昼食',d:'継続的な栄養供給',r:25},{l:'⚡ 運動後',d:'【ゴールデンタイム】30〜60分以内が最重要',r:30},{l:'🌙 夕食',d:'就寝前カゼインを別途追加推奨',r:20}],
+    energy:     [{l:'🌅 朝食',d:'エネルギー補給の基盤',r:30},{l:'☀️ 昼食',d:'メインの炭水化物源',r:30},{l:'🍎 補食（運動前後）',d:'運動前はバナナ・運動後はプロテイン',r:20},{l:'🌙 夕食',d:'タンパク質＋野菜で回復を促進',r:20}],
+    recovery:   [{l:'🌅 朝食',d:'腸に優しいスタート（ヨーグルト・卵）',r:25},{l:'☀️ 昼食',d:'栄養密度の高い主食',r:30},{l:'🍎 補食',d:'ナッツ・果物など消化しやすいものを',r:20},{l:'🌙 夕食',d:'魚・緑黄色野菜・発酵食品を意識',r:25}],
+    aesthetics: [{l:'🌅 朝食',d:'高タンパク・中炭水化物でスタート',r:30},{l:'☀️ 昼食',d:'炭水化物を昼までに集中',r:30},{l:'🍎 補食',d:'間食でタンパク質を小分けに補給',r:15},{l:'🌙 夕食（低脂質）',d:'夜は低糖質・高タンパクを意識',r:25}],
+  },
+  5:{
+    fat:        [{l:'🌅 朝食（最大）',d:'代謝を最大化・満腹感を持続',r:30},{l:'🍎 補食①',d:'空腹対策・筋分解防止',r:15},{l:'☀️ 昼食',d:'血糖値管理・消化に優しく',r:25},{l:'🍎 補食②',d:'夕食前の過食防止',r:10},{l:'🌙 夕食（軽め）',d:'21時前に完了が理想',r:20}],
+    muscle:     [{l:'🌅 朝食',d:'筋合成基盤',r:20},{l:'🥤 補食①',d:'分割でロイシン閾値を維持',r:15},{l:'☀️ 昼食',d:'継続的な栄養供給',r:25},{l:'⚡ 運動後',d:'【ゴールデンタイム】絶対に外さない',r:25},{l:'🌙 夕食',d:'少量＋就寝前カゼイン追加推奨',r:15}],
+    energy:     [{l:'🌅 朝食',d:'体内時計リセット・エネルギー補給',r:25},{l:'🍎 補食①',d:'低GIで血糖値を安定させる',r:15},{l:'☀️ 昼食',d:'主要なエネルギー源・炭水化物中心',r:25},{l:'⚡ 運動前後',d:'前：炭水化物/後：タンパク質が基本',r:20},{l:'🌙 夕食',d:'翌日に備えた回復食',r:15}],
+    recovery:   [{l:'🌅 朝食',d:'消化を意識した少量スタート',r:20},{l:'🍎 補食①',d:'ナッツ・果物など抗酸化食品',r:15},{l:'☀️ 昼食',d:'バランスの良い主食',r:25},{l:'🍎 補食②',d:'発酵食品（ヨーグルト・納豆）を積極的に',r:15},{l:'🌙 夕食',d:'魚・野菜・豆腐を中心に',r:25}],
+    aesthetics: [{l:'🌅 朝食',d:'タンパク質ファースト・代謝を上げる',r:25},{l:'🍎 補食①',d:'筋肉維持のための小分けタンパク',r:15},{l:'☀️ 昼食',d:'炭水化物は昼に集中させる',r:25},{l:'🍎 補食②',d:'運動後のリカバリーに',r:15},{l:'🌙 夕食（低糖質）',d:'脂質・糖質は最小限に',r:20}],
+  },
+};
+
+const fdata={
+fat:[{e:'🐔',n:'鶏ささみ (100g)',d:'低脂質・高タンパクの最高峰',p:24},{e:'🧀',n:'カッテージチーズ (100g)',d:'低脂質で満腹感◎',p:11},{e:'🦐',n:'エビ (100g)',d:'脂質がほぼゼロ',p:19},{e:'🫘',n:'枝豆 (100g)',d:'食物繊維も同時摂取',p:11}],
+muscle:[{e:'🐔',n:'鶏むね肉 (100g)',d:'1枚≈200g、コスパ最高',p:23},{e:'🥚',n:'卵 (1個)',d:'完全栄養食・吸収率97%',p:6},{e:'🐟',n:'ツナ缶 (70g)',d:'手軽にどこでも補給可',p:14},{e:'🥛',n:'プロテインシェイク',d:'1杯で25g、最も効率的',p:25}],
+energy:[{e:'🍌',n:'バナナ (1本)',d:'素早いエネルギー源・カリウム豊富',p:1.2},{e:'🥚',n:'卵 (1個)',d:'完全栄養食・体力づくりの基本',p:6},{e:'🐟',n:'鮭 (100g)',d:'持久力を支えるオメガ3',p:22},{e:'🌾',n:'玄米 (150g)',d:'低GI・持続エネルギー源',p:4}],
+recovery:[{e:'🫘',n:'納豆 (1パック)',d:'植物性タンパク＋腸活',p:8},{e:'🐄',n:'ギリシャヨーグルト',d:'プロバイオティクスで腸を整える',p:17},{e:'🐟',n:'鮭・サバ (100g)',d:'抗炎症オメガ3が豊富',p:22},{e:'🌾',n:'豆腐 (150g)',d:'消化が良く毎日食べやすい',p:8}],
+aesthetics:[{e:'🐔',n:'鶏むね肉 (100g)',d:'低脂質・体型維持の定番',p:23},{e:'🥚',n:'卵白 (3個)',d:'純タンパク質・脂質ほぼゼロ',p:11},{e:'🐟',n:'白身魚 (100g)',d:'低脂質・高タンパクで見た目に直結',p:21},{e:'🫘',n:'納豆 (1パック)',d:'植物性タンパク・脂質が少ない',p:8}]};
+
+const ins={
+fat:{male:'減量中は筋肉が分解されやすい状態です。タンパク質を増やしながら炭水化物を適度に維持することで、筋肉を守りながら脂肪を落とせます。',female:'女性の減量ではタンパク質不足に特に注意。不足すると髪・爪・肌の質が低下します。'},
+muscle:{male:'筋肥大には十分なカロリー（特に炭水化物）との組み合わせが重要です。運動後30〜60分以内にプロテイン20〜40gを摂ることで合成効率が最大化されます。',female:'女性の筋肥大は男性より緩やかですが、最適タンパク量は変わりません。ホルモン周期に合わせて食事量を微調整する意識も持ちましょう。'},
+energy:{male:'体力向上には炭水化物エネルギーとタンパク質のバランスが重要。運動前後のタイミング摂取を意識することでパフォーマンスが大幅に上がります。',female:'女性は鉄分不足が体力低下の主因になりやすい。赤身肉・豆類・ほうれん草と一緒にタンパク質を摂ることで鉄分吸収も高まります。'},
+recovery:{male:'不調改善には腸内環境の整備が最優先。発酵食品（納豆・ヨーグルト・味噌）を毎日取り入れながら、消化しやすいタンパク質源を選びましょう。',female:'ホルモンバランスと腸内環境は密接に関わっています。大豆イソフラボンを含む豆腐・豆乳・納豆を積極的に摂ることがおすすめです。'},
+aesthetics:{male:'体型維持には筋肉量の確保が最重要。脂質を絞りながらタンパク質をしっかり摂ることで、引き締まった見た目を維持できます。',female:'見た目の変化には体脂肪率の低下と筋肉量の維持が両立が必要。高タンパク・低カロリーを意識しながら食事の質を上げていきましょう。'}};
+
+const sci={
+fat:'減量期は筋肉量維持のために通常より多い2.3〜2.6g/kgが推奨されます（Helms et al., 2014）。高タンパク食は食欲抑制ペプチドYYの分泌を促します（Lejeune et al., 2006）。',
+muscle:'ISSNの2017年レビュー（Stokes et al.）によると、筋肥大の最大化には体重1kgあたり1.6〜2.2gのタンパク質摂取が推奨。年齢とともにアナボリック抵抗が高まるため、40代以降は基準量の10〜20%増が有効です（Churchward-Venne et al., 2016）。',
+energy:'体力・持久力向上には1.6〜1.8g/kgが最適レンジ。炭水化物とタンパク質の比率（3:1）で運動後に摂取すると筋グリコーゲンの回復が最速になります（Ivy et al., 2002）。',
+recovery:'慢性的な不調・疲労回復には腸内環境の改善が重要。適切なタンパク質摂取（1.4〜1.6g/kg）と発酵食品の組み合わせが免疫機能と自律神経の安定に寄与します（Cani et al., 2016）。',
+aesthetics:'体型（見た目）改善には脂肪量を減らしながら筋肉量を維持する「ボディリコンポジション」が目標。1.8〜2.0g/kgのタンパク質摂取が脂肪燃焼と筋維持を同時に支えます（Barakat et al., 2020）。'};
+
+function setG(v,el){gender=v;['gM','gF'].forEach(id=>document.getElementById(id).classList.remove('on'));el.classList.add('on')}
+function setAge(i,el){ageIdx=i;document.querySelectorAll('.age-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');document.getElementById('ageNote').textContent=ageData[i].note;}
+function setGoal(el,k,mn,mx){gkey=k;gmin=mn;gmax=mx;document.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function setAct(el,v){act=v;document.querySelectorAll('.act-item').forEach(a=>a.classList.remove('on'));el.classList.add('on')}
+function setMeals(n,el){
+  mealCount=n;
+  document.querySelectorAll('.mc-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mcNote').textContent=mcNotes[n];
+}
+
+function calc(){
+  const w=parseFloat(document.getElementById('ws').value)||65;
+  const ageMul=ageData[ageIdx].mul;
+  const gAdj=gender==='female'?0.92:1.0;
+  const mn=Math.round(w*gmin*act*ageMul*gAdj);
+  const mx=Math.round(w*gmax*act*ageMul*gAdj);
+  const avg=Math.round((mn+mx)/2);
+
+  document.getElementById('rn1').textContent=mn;
+  document.getElementById('rn2').textContent=mx;
+  document.getElementById('rb').textContent=`体重${w}kg × ${gmin}〜${gmax} g/kg × 活動${act} × 年齢補正${ageMul}`;
+  document.getElementById('rAgeNote').textContent=ageData[ageIdx].rNote;
+
+  const meals=mealTemplates[mealCount][gkey];
+  const totalRatio=meals.reduce((s,m)=>s+m.r,0);
+  const maxRatio=Math.max(...meals.map(m=>m.r));
+
+  document.getElementById('meal-grid-title').textContent=`食事別タンパク質配分（${mealCount}食）`;
+  document.getElementById('meal-grid').innerHTML=meals.map(m=>{
+    const g=Math.round(avg*m.r/totalRatio);
+    return `<div class="meal-mc"><div class="meal-mc-t">${m.l}</div><div class="meal-mc-g">${g}</div><div class="meal-mc-u">g</div><div class="meal-mc-d">${m.d}</div></div>`;
+  }).join('');
+
+  document.getElementById('trows').innerHTML=meals.map(m=>{
+    const g=Math.round(avg*m.r/totalRatio);
+    const label=m.l.replace(/^[\S]+\s/,'');
+    return `<div class="t-row"><div class="t-label">${label}<br><span style="font-size:9px;color:var(--muted)">${m.d}</span></div><div class="t-bar-bg"><div class="t-bar-fill" style="width:${Math.round(m.r/maxRatio*100)}%"></div></div><div class="t-g">${g}g</div></div>`;
+  }).join('');
+
+  document.getElementById('foods').innerHTML=fdata[gkey].map(f=>`<div class="food-row"><div class="food-em">${f.e}</div><div class="food-bd"><div class="food-nm">${f.n}</div><div class="food-nt">${f.d}</div></div><div class="food-pg">${f.p}<span class="food-pu">g</span></div></div>`).join('');
+  document.getElementById('ins').textContent=ins[gkey][gender];
+  document.getElementById('sci').textContent=sci[gkey];
+
+  const r=document.getElementById('res');
+  r.classList.add('on');r.style.opacity=0;
+  setTimeout(()=>{r.style.transition='opacity .5s';r.style.opacity=1},10);
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

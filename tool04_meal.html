@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食事タイミングプランナー｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080A;--card:#0F0F14;--card2:#14141A;--border:#1E1E28;--border2:#252530;
+  --accent:#06B6D4;--accent2:#22D3EE;--accent3:#0E7490;
+  --amber:#F59E0B;--green:#10B981;
+  --text:#F0EDF5;--text2:#C0BCCC;--muted:#5A566A;
+  --mono:'Space Mono',monospace;--sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:72px}
+.back-btn{position:fixed;top:12px;left:12px;z-index:9999;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(15,15,20,0.85);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s}
+.back-btn:hover{background:rgba(6,182,212,0.15);border-color:var(--accent)}
+.back-btn svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+.hdr{background:linear-gradient(160deg,#080A0C 0%,#080A0E 100%);padding:44px 20px 32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(6,182,212,0.1),transparent 65%);border-radius:50%}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent3),var(--accent),var(--accent3),transparent)}
+.brand{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;margin-bottom:14px;text-transform:uppercase}
+.hdr h1{font-size:28px;font-weight:900;line-height:1.2;margin-bottom:8px}
+.hdr h1 span{color:var(--accent)}
+.hdr p{font-size:12px;color:var(--muted);line-height:1.7}
+.sci-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:5px 12px;background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.22);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.main{padding:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(6,182,212,0.18),transparent)}
+.card-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.time-lbl{font-size:11px;color:var(--muted);margin-bottom:8px;display:block}
+.time-input{background:var(--card2);border:1.5px solid var(--border2);border-radius:10px;padding:12px 14px;transition:border-color .2s}
+.time-input:focus-within{border-color:rgba(6,182,212,0.4)}
+.time-input input{background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:22px;font-weight:700;width:100%}
+.time-input input[type=time]::-webkit-calendar-picker-indicator{filter:invert(.4)}
+.age-row{display:flex;gap:5px;margin-top:18px}
+.age-btn{flex:1;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s}
+.age-btn.on{border-color:var(--accent);background:rgba(6,182,212,0.09)}
+.age-btn .age-num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted);transition:color .2s}
+.age-btn.on .age-num{color:var(--accent)}
+.age-btn .age-lbl{font-size:8px;color:var(--muted);margin-top:2px;display:block}
+.age-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;padding:10px 12px;background:rgba(6,182,212,0.05);border-radius:8px;border-left:2px solid var(--accent)}
+.mc-row{display:flex;gap:6px;margin-top:18px}
+.mc-btn{flex:1;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:11px 4px;text-align:center;cursor:pointer;transition:all .2s}
+.mc-btn.on{border-color:var(--accent);background:rgba(6,182,212,0.09)}
+.mc-btn-num{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--muted);transition:color .2s}
+.mc-btn.on .mc-btn-num{color:var(--accent)}
+.mc-btn-lbl{font-size:9px;color:var(--muted);margin-top:3px;display:block}
+.mc-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;padding:10px 12px;background:rgba(6,182,212,0.04);border-radius:8px;border-left:2px solid var(--border2)}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 16px;background:var(--card2);border:1.5px solid var(--border2);border-radius:20px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:500;color:var(--muted)}
+.chip.on{border-color:rgba(6,182,212,0.4);background:rgba(6,182,212,0.08);color:var(--accent)}
+.ex-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tog-lbl{font-size:13px;font-weight:500}
+.tog-sw{width:44px;height:24px;background:var(--border2);border-radius:12px;cursor:pointer;transition:background .2s;position:relative;flex-shrink:0}
+.tog-sw.on{background:var(--accent)}
+.tog-sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.tog-sw.on::after{transform:translateX(20px)}
+.ex-time{display:none}
+.ex-time.on{display:block;margin-top:14px}
+.cta{width:100%;background:var(--accent);border:none;border-radius:12px;padding:18px;color:#fff;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;margin-top:6px;transition:all .2s;box-shadow:0 6px 24px rgba(6,182,212,0.22)}
+.cta:active{transform:scale(.98)}
+.res{display:none;margin-top:4px}
+.res.on{display:block;animation:rise .4s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:6px;top:12px;bottom:12px;width:1px;background:linear-gradient(180deg,var(--accent),var(--accent3),var(--border))}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-20px;top:12px;width:10px;height:10px;background:var(--bg);border:1.5px solid var(--accent3);border-radius:2px}
+.tl-dot.hl{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(6,182,212,.4);border-radius:50%}
+.tl-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.tl-card.hl{border-color:rgba(6,182,212,0.3);background:rgba(6,182,212,0.04)}
+.tl-time{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.tl-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.tl-desc{font-size:11px;color:var(--text2);line-height:1.8}
+.tl-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tl-tag{font-family:var(--mono);font-size:8px;padding:3px 8px;border:1px solid var(--border2);color:var(--muted);border-radius:4px;text-transform:uppercase;letter-spacing:1px}
+.tl-tag.hl{border-color:rgba(6,182,212,0.3);color:var(--accent)}
+.tip-item{display:flex;gap:12px;padding:16px;background:var(--card2);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.tip-ic{font-size:18px;flex-shrink:0}
+.tip-hd{font-size:13px;font-weight:700;margin-bottom:4px}
+.tip-tx{font-size:11px;color:var(--text2);line-height:1.8}
+.sci-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:4px}
+.sci-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.sci-box p{font-size:11px;color:var(--muted);line-height:1.9}
+.ftr{text-align:center;padding:40px 20px 0;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px}
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="location.href='/index.html'">
+  <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>診断ツール一覧に戻る
+</button>
+<div class="hdr">
+  <div class="brand">Fit Project AI</div>
+  <h1>食事タイミング<br><span>プランナー</span></h1>
+  <p>生活リズムと年齢から体内時計に最適な<br>食事スケジュールを自動生成します</p>
+  <div class="sci-badge">⚗ 時間栄養学・概日リズムベース</div>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="card-title">STEP 01 — 生活リズム & 食事回数</div>
+    <div class="time-grid">
+      <div><span class="time-lbl">🌅 起床時間</span><div class="time-input"><input type="time" id="wt" value="07:00"></div></div>
+      <div><span class="time-lbl">🌙 就寝時間</span><div class="time-input"><input type="time" id="st" value="23:00"></div></div>
+    </div>
+
+    <div class="age-row">
+      <div class="age-btn" id="a0" onclick="setAge(0,this)"><div class="age-num">20代</div><span class="age-lbl">〜29歳</span></div>
+      <div class="age-btn on" id="a1" onclick="setAge(1,this)"><div class="age-num">30代</div><span class="age-lbl">30〜39</span></div>
+      <div class="age-btn" id="a2" onclick="setAge(2,this)"><div class="age-num">40代</div><span class="age-lbl">40〜49</span></div>
+      <div class="age-btn" id="a3" onclick="setAge(3,this)"><div class="age-num">50代</div><span class="age-lbl">50〜59</span></div>
+      <div class="age-btn" id="a4" onclick="setAge(4,this)"><div class="age-num">60代+</div><span class="age-lbl">60歳〜</span></div>
+    </div>
+    <div class="age-note" id="ageNote">30代：消化吸収は安定していますが、食後の血糖管理を意識し始めることが重要です。</div>
+
+    <div class="mc-row">
+      <div class="mc-btn" id="mc2" onclick="setMeals(2,this)"><div class="mc-btn-num">2</div><span class="mc-btn-lbl">食/日</span></div>
+      <div class="mc-btn on" id="mc3" onclick="setMeals(3,this)"><div class="mc-btn-num">3</div><span class="mc-btn-lbl">食/日</span></div>
+      <div class="mc-btn" id="mc4" onclick="setMeals(4,this)"><div class="mc-btn-num">4</div><span class="mc-btn-lbl">食/日</span></div>
+      <div class="mc-btn" id="mc5" onclick="setMeals(5,this)"><div class="mc-btn-num">5</div><span class="mc-btn-lbl">食/日</span></div>
+    </div>
+    <div class="mc-note" id="mcNote">3食：起床〜就寝の間隔を均等に分割してタイムラインを生成します。</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 02 — 目標</div>
+    <div class="chip-row">
+      <div class="chip on" onclick="setG(this,'fat')">🔥 脂肪を落としたい</div>
+      <div class="chip" onclick="setG(this,'muscle')">💪 筋肉をつけたい</div>
+      <div class="chip" onclick="setG(this,'energy')">⚡ 体力を上げたい</div>
+      <div class="chip" onclick="setG(this,'recovery')">🌿 不調を改善したい</div>
+      <div class="chip" onclick="setG(this,'aesthetics')">✨ 体型を整えたい</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STEP 03 — 運動タイミング</div>
+    <div class="tog-row">
+      <span class="tog-lbl">今日、運動する予定がある</span>
+      <div class="tog-sw" id="exTog" onclick="toggleEx(this)"></div>
+    </div>
+    <div class="ex-time" id="exWrap">
+      <div class="ex-chips">
+        <div class="chip on" onclick="setEx(this,'morning')">🌅 朝（7〜9時）</div>
+        <div class="chip" onclick="setEx(this,'lunch')">☀️ 昼（12〜14時）</div>
+        <div class="chip" onclick="setEx(this,'evening')">🌆 夕方〜夜（17〜21時）</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="cta" onclick="gen()">プランを生成する →</button>
+
+  <div class="res" id="res">
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" id="tl-title">Your Timeline</div>
+      <div class="tl" id="tl"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">年齢別 Timing Tips</div>
+      <div id="tips"></div>
+    </div>
+    <div class="sci-box">
+      <div class="sci-lbl">Scientific Reference</div>
+      <p id="sci"></p>
+    </div>
+  </div>
+</div>
+<div class="ftr">FIT PROJECT AI — AI × プロコーチで、続く体づくりを。</div>
+
+<script>
+let goal='fat', exOn=false, exTime='morning', ageIdx=1, mealCount=3;
+
+const mcNotes={
+  2:'2食：16:8断食や2食スタイルに対応。朝食（起床30分後）と夕食（就寝3時間前）の2点で構成します。',
+  3:'3食：起床〜就寝の間隔を均等に分割してタイムラインを生成します。',
+  4:'4食：3食＋補食1回。補食で血糖値の安定と筋分解防止を実現します。',
+  5:'5食：少量頻回スタイル。消化負担を分散しながら1日を通じてタンパク質を供給します。',
+};
+
+const ageTips=[
+  [{ic:'⚡',hd:'代謝が最も活発な年代',tx:'20代は代謝・回復力がピーク。食事タイミングの多少のズレは影響が小さく、まずは総摂取量を意識しましょう。'},{ic:'🕐',hd:'3〜4時間ルールで安定供給',tx:'空腹が長くなるとコルチゾール（筋分解ホルモン）が上昇。3〜4時間以内に次の食事か補食を。'},{ic:'⏰',hd:'朝食は起床後1時間以内に',tx:'体内時計のリセットに最も重要。朝食を抜くと午後のパフォーマンスが最大20%低下するとも。'}],
+  [{ic:'🕘',hd:'朝食の重要性が高まる年代',tx:'30代から代謝が緩やかに低下し始めます。朝食を必ず食べることで基礎代謝の維持に貢献します。'},{ic:'📈',hd:'食後血糖値を意識し始める',tx:'低GI食（玄米・全粒粉）を選ぶことで午後の眠気が減り、業務パフォーマンスが上がります。'},{ic:'🌙',hd:'夜遅い食事を減らす',tx:'BMAL1（脂肪蓄積遺伝子）の活性化は21時以降に高まります。夕食は21時前を目標に。'}],
+  [{ic:'⚠️',hd:'アナボリック抵抗に対応する',tx:'40代は筋タンパク合成の感受性が低下。運動後30分以内のタンパク質補給を特に厳守しましょう。'},{ic:'🍽️',hd:'1回の食事量を減らし回数を増やす',tx:'消化酵素の分泌が低下するため、少量頻回（4〜5回/日）が消化吸収を最大化します。'},{ic:'🌙',hd:'夜21時以降の炭水化物NG',tx:'40代以降はインスリン感受性が低下。夜の高糖質食は脂肪蓄積を加速させます。'}],
+  [{ic:'🦴',hd:'カルシウムと一緒にタンパク質を',tx:'50代はサルコペニア＋骨粗鬆症の予防が急務。乳製品など両方を含む食材を意識して選びましょう。'},{ic:'🌙',hd:'就寝前カゼインで夜間筋分解を防ぐ',tx:'50代は夜間の筋分解が速くなります。就寝1時間前に牛乳・カッテージチーズで夜間の合成をサポート。'},{ic:'⏰',hd:'朝食は必ず摂る（免疫サポート）',tx:'朝食の欠食は免疫機能の低下と関連。50代以降は特に感染防御の観点からも朝食が重要です。'}],
+  [{ic:'🏃',hd:'食後の軽い運動で血糖コントロール',tx:'食後15〜20分のウォーキングが血糖値スパイクを抑制。60代以降の糖尿病・メタボ予防に非常に有効。'},{ic:'🍽️',hd:'少量頻回（4〜5回/日）を基本に',tx:'消化吸収効率が低下するため、一度に大量に食べても利用されにくくなります。少量ずつこまめに摂りましょう。'},{ic:'💊',hd:'ビタミンDとカルシウムを意識',tx:'60代以降は骨密度低下が加速。乳製品・魚（特にサーモン）と日光浴の組み合わせが効果的です。'}],
+];
+
+const ageNotes=['20代：消化吸収・代謝・回復力が最もピークな時期。食事タイミングより総摂取量と質を重視しましょう。','30代：消化吸収は安定していますが、食後の血糖管理を意識し始めることが重要です。','40代：消化酵素の分泌が低下。少量頻回が効果的。運動後のタンパク質補給を特に厳守しましょう。','50代：サルコペニア予防が急務。夜間の筋分解防止に就寝前カゼインが特に有効な年代です。','60代以上：少量頻回（4〜5回/日）が基本。食後15〜20分のウォーキングで血糖管理を。'];
+
+const sciences={
+  fat:'時間制限食（TRE）の研究では、食事を8〜10時間に集中させると同カロリーでも体脂肪が減少しやすいことが示されています（Sutton et al., 2018）。BMAL1遺伝子の活性が夜間に高まるため、夜の糖質を控えることが40代以降に特に有効です。',
+  muscle:'ISSNポジションスタンド（2017）によれば、運動後30〜60分以内のタンパク質摂取が筋合成を最大化します。40代以降はアナボリック抵抗の増加により、このウィンドウを厳守する重要性が高まります（Churchward-Venne et al., 2016）。',
+  energy:'朝食は体内時計をリセットし、日中の代謝効率を上げます（Jakubowicz et al., 2013）。低GI食（玄米・全粒粉・豆類）の選択で血糖値スパイクを防ぎ、30代以降の午後パフォーマンス低下を防げます。運動前後のタイミング摂取でパフォーマンスが最大化されます。',
+  recovery:'時間栄養学（Chrono-nutrition）では、同じ食事でも「いつ食べるか」が代謝に大きな影響を与えます（Garaulet et al., 2013）。不調改善には腸内環境の整備が最優先。食事タイミングの規則化が自律神経の安定に直結します（Schibler et al., 2015）。',
+  aesthetics:'体型改善には食事タイミングと総カロリーの両方が重要。夜の糖質を抑え炭水化物を昼までに集中させることで、同カロリーでも体脂肪の蓄積を抑えられます（Garaulet et al., 2013）。',
+};
+
+function setAge(i,el){ageIdx=i;document.querySelectorAll('.age-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');document.getElementById('ageNote').textContent=ageNotes[i]}
+function setG(el,v){goal=v;document.querySelectorAll('.chip-row .chip').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function toggleEx(el){exOn=!exOn;el.classList.toggle('on',exOn);document.getElementById('exWrap').classList.toggle('on',exOn)}
+function setEx(el,v){exTime=v;document.querySelectorAll('.ex-chips .chip').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function setMeals(n,el){
+  mealCount=n;
+  document.querySelectorAll('.mc-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mcNote').textContent=mcNotes[n];
+}
+
+function addM(t,m){
+  const[h,mi]=t.split(':').map(Number);
+  const tot=h*60+mi+m;
+  const th=Math.floor(((tot%1440)+1440)%1440/60);
+  const tm=((tot%1440)+1440)%1440%60;
+  return `${String(th).padStart(2,'0')}:${String(tm).padStart(2,'0')}`;
+}
+function fmt(t){const[h,m]=t.split(':').map(Number);return`${h}:${String(m).padStart(2,'0')}`}
+
+function gen(){
+  const wake=document.getElementById('wt').value||'07:00';
+  const sleep=document.getElementById('st').value||'23:00';
+  const[wh,wm]=wake.split(':').map(Number);
+  const[sh,sm]=sleep.split(':').map(Number);
+  let wakeMin=wh*60+wm;
+  let sleepMin=sh*60+sm;
+  if(sleepMin<=wakeMin) sleepMin+=1440;
+  const awakeSpan=sleepMin-wakeMin;
+
+  const bf=addM(wake,30);
+  let items=[];
+
+  const bfDesc={
+    fat:'高タンパク・低GI食で概日リズムをリセット。朝食を1日最大の食事にすることが脂肪燃焼に有利。',
+    muscle:'タンパク質30g以上＋炭水化物。1日の筋合成基盤を作る最重要の食事。',
+    energy:'起床後1時間以内に複合炭水化物＋タンパク質。体力づくりのエネルギー基盤を朝に確保。',
+    recovery:'消化に優しいタンパク質（卵・豆腐・ヨーグルト）でゆっくりスタート。腸の調子を整える朝食が重要。',
+    aesthetics:'高タンパク・低GI朝食で代謝を上げる。体型維持には朝食を抜かないことが絶対条件。',
+  };
+  items.push({t:bf,title:'朝食',desc:bfDesc[goal],tags:['概日リズムリセット','必須'],hl:true});
+
+  if(mealCount===2){
+    const dn=addM(sleep,-180);
+    if(exOn&&exTime==='morning'){
+      items.push({t:addM(bf,60),title:'運動後の食事（兼 昼食）',desc:`タンパク質20〜40g＋炭水化物。${ageIdx>=2?'40代以降はこのウィンドウを特に厳守。':''}`,tags:['GOLDEN WINDOW','POST-WORKOUT'],hl:true});
+    }
+    if(exOn&&exTime==='evening'){
+      items.push({t:addM(dn,-30),title:'夕食（運動後）',desc:'運動後のタンパク質補給。就寝2〜3時間前に終えること。',tags:['POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:dn,title:'夕食',desc:`${goal==='fat'?'1日最大の炭水化物は朝に回す。夕食は高タンパク・低糖質で。':goal==='muscle'?'タンパク質多め。就寝前カゼインの追加を推奨。':goal==='energy'?'翌日の体力に備えて炭水化物も確保。回復食として意識を。':goal==='recovery'?'魚・発酵食品・野菜を中心に。消化しやすいものを選んで腸を整える。':goal==='aesthetics'?'夜は糖質を最小限に。高タンパク・低脂質で体型を維持。':'消化しやすいものを選んで就寝に備える。'}`,tags:['メインの食事'],hl:false});
+    }
+
+  } else if(mealCount===3){
+    const interval=Math.round((awakeSpan-30)/3);
+    const ln=addM(bf,interval);
+    const dn=addM(sleep,-180);
+    if(exOn&&exTime==='morning'){
+      items.push({t:addM(bf,60),title:'運動後の食事',desc:`タンパク質20〜40g＋炭水化物。${ageIdx>=2?'40代以降はこのウィンドウを特に厳守。':''}`,tags:['GOLDEN WINDOW','POST-WORKOUT'],hl:true});
+    } else if(exOn&&exTime==='lunch'){
+      items.push({t:addM(ln,-60),title:'運動前の軽食',desc:'消化の良い炭水化物を少量。',tags:['PRE-WORKOUT'],hl:false});
+      items.push({t:addM(ln,45),title:'運動後の食事（昼食）',desc:`タンパク質を意識した昼食。${ageIdx>=2?'40代以降：プロテインシェイクを先に飲んでから食事が最効率。':''}`,tags:['POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:ln,title:'昼食',desc:`代謝のピーク時間帯。${ageIdx>=2?'食べすぎ注意。':'バランスの良い食事で午後のエネルギーを確保。'}`,tags:['代謝ピーク'],hl:false});
+    }
+    if(exOn&&exTime==='evening'){
+      items.push({t:addM(dn,-90),title:'運動前の軽食',desc:'空腹での運動は筋分解リスクが高い。消化しやすい炭水化物で補給。',tags:['PRE-WORKOUT'],hl:false});
+      items.push({t:addM(dn,60),title:'運動後の夕食',desc:`タンパク質中心。就寝2〜3時間前に終わらせること。${ageIdx>=1?'夜の糖質は控えめに。':''}`,tags:['POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:dn,title:'夕食',desc:`${goal==='fat'||goal==='aesthetics'||ageIdx>=2?'炭水化物は控えめに。BMAL1遺伝子が21時以降に活性化。':goal==='recovery'?'消化に優しい食材を選んで腸を休ませる。':'就寝2〜3時間前まで。高糖質は避けましょう。'}`,tags:['睡眠の質向上'],hl:false});
+    }
+
+  } else if(mealCount===4){
+    const interval=Math.round((awakeSpan-30)/4);
+    const ln=addM(bf,interval);
+    const snk=addM(bf,interval*2);
+    const dn=addM(sleep,-180);
+    if(exOn&&exTime==='morning'){
+      items.push({t:addM(bf,60),title:'運動後の食事',desc:`タンパク質20〜40g。${ageIdx>=2?'40代以降はこのウィンドウを特に厳守。':''}`,tags:['GOLDEN WINDOW','POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:ln,title:'昼食',desc:`代謝のピーク時間帯。${ageIdx>=2?'少量頻回の一環として適量に。':'しっかり食べてエネルギーを確保。'}`,tags:['代謝ピーク'],hl:false});
+    }
+    items.push({t:snk,title:'補食',desc:`ナッツ・ギリシャヨーグルト・プロテインバーが最適。${ageIdx>=2?'少量頻回が40代以降の消化吸収最適化に効果的。':'血糖値の安定と筋分解防止。'}`,tags:['少量頻回','筋分解防止'],hl:false});
+    if(exOn&&exTime==='evening'){
+      items.push({t:addM(dn,-90),title:'運動前の軽食',desc:'空腹での運動は筋分解リスクが高い。消化しやすい炭水化物で補給。',tags:['PRE-WORKOUT'],hl:false});
+      items.push({t:addM(dn,60),title:'運動後の夕食',desc:`タンパク質中心。就寝2〜3時間前に終わらせること。`,tags:['POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:dn,title:'夕食',desc:`${goal==='fat'||ageIdx>=2?'炭水化物は控えめに。':' 就寝2〜3時間前まで。'}`,tags:['睡眠の質向上'],hl:false});
+    }
+
+  } else if(mealCount===5){
+    const interval=Math.round((awakeSpan-30)/5);
+    const snk1=addM(bf,interval);
+    const ln=addM(bf,interval*2);
+    const snk2=addM(bf,interval*3);
+    const dn=addM(sleep,-150);
+    if(exOn&&exTime==='morning'){
+      items.push({t:addM(bf,60),title:'運動後の食事',desc:`タンパク質20〜40g。${ageIdx>=2?'40代以降はこのウィンドウを特に厳守。':''}`,tags:['GOLDEN WINDOW','POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:snk1,title:'補食①',desc:'少量のタンパク質＋炭水化物で血糖値を安定。ロイシン閾値を継続的に維持します。',tags:['少量頻回'],hl:false});
+    }
+    items.push({t:ln,title:'昼食',desc:`代謝のピーク時間帯。${ageIdx>=2?'少量頻回の一環としてやや控えめに。':'しっかり食べてエネルギーを確保。'}`,tags:['代謝ピーク'],hl:false});
+    items.push({t:snk2,title:'補食②',desc:'ナッツ・ギリシャヨーグルト・プロテインバーなどが最適。夕食前の過食を防ぎます。',tags:['少量頻回','過食防止'],hl:false});
+    if(exOn&&exTime==='evening'){
+      items.push({t:addM(dn,-60),title:'運動前の軽食',desc:'消化の良い炭水化物を少量。',tags:['PRE-WORKOUT'],hl:false});
+      items.push({t:addM(dn,45),title:'運動後の夕食',desc:`タンパク質中心。就寝2時間前に終わらせること。`,tags:['POST-WORKOUT'],hl:true});
+    } else {
+      items.push({t:dn,title:'夕食',desc:`少量で消化に良いものを。${goal==='fat'||ageIdx>=2?'炭水化物は控えめに。':''}`,tags:['睡眠の質向上'],hl:false});
+    }
+  }
+
+  if(goal==='muscle'||goal==='aesthetics'||ageIdx>=3){
+    items.push({t:addM(sleep,-60),title:'就寝前タンパク質（推奨）',desc:`カゼイン（牛乳・カッテージチーズ）を就寝1時間前に。${ageIdx>=3?'50代以降の夜間筋分解防止に特に重要です。':'就寝中の筋タンパク合成をサポート。'}`,tags:[ageIdx>=3?'必須（50代以降）':'CASEIN','夜間合成'],hl:ageIdx>=3});
+  }
+
+  items.sort((a,b)=>{
+    const[ah,am]=a.t.split(':').map(Number),[bh,bm]=b.t.split(':').map(Number);
+    return(ah*60+am)-(bh*60+bm);
+  });
+
+  document.getElementById('tl-title').textContent=`Your Timeline（${mealCount}食プラン）`;
+  document.getElementById('tl').innerHTML=items.map(it=>`
+    <div class="tl-item">
+      <div class="tl-dot ${it.hl?'hl':''}"></div>
+      <div class="tl-card ${it.hl?'hl':''}">
+        <div class="tl-time">${fmt(it.t)}</div>
+        <div class="tl-title">${it.title}</div>
+        <div class="tl-desc">${it.desc}</div>
+        <div class="tl-tags">${it.tags.map(tg=>`<span class="tl-tag ${it.hl?'hl':''}">${tg}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('tips').innerHTML=ageTips[ageIdx].map(tp=>`
+    <div class="tip-item"><div class="tip-ic">${tp.ic}</div><div><div class="tip-hd">${tp.hd}</div><div class="tip-tx">${tp.tx}</div></div></div>`).join('');
+
+  document.getElementById('sci').textContent=sciences[goal];
+  const r=document.getElementById('res');
+  r.classList.add('on');r.style.opacity=0;
+  setTimeout(()=>{r.style.transition='opacity .5s';r.style.opacity=1},10);
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+
+</body>
+</html>

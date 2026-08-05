@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>続かない原因診断｜Fit Project AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080A;--card:#0F0F14;--card2:#14141A;--border:#1E1E28;--border2:#252530;
+  --accent:#8B5CF6;--accent2:#A78BFA;--accent3:#6D28D9;
+  --green:#10B981;--amber:#F59E0B;
+  --text:#F0EDF5;--text2:#C0BCCC;--muted:#5A566A;
+  --mono:'Space Mono',monospace;--sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:72px}
+.back-btn{position:fixed;top:12px;left:12px;z-index:9999;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(15,15,20,0.85);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s}
+.back-btn:hover{background:rgba(139,92,246,0.15);border-color:var(--accent)}
+.back-btn svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+
+.hdr{background:linear-gradient(160deg,#0A0A12 0%,#0C0810 100%);padding:44px 20px 32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(139,92,246,0.1),transparent 65%);border-radius:50%}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent3),var(--accent),var(--accent3),transparent)}
+.brand{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;margin-bottom:14px;text-transform:uppercase}
+.hdr h1{font-size:28px;font-weight:900;line-height:1.2;margin-bottom:8px}
+.hdr h1 span{color:var(--accent)}
+.hdr p{font-size:12px;color:var(--muted);line-height:1.7}
+.sci-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:5px 12px;background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.22);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+
+.prog-wrap{padding:16px 20px 0}
+.prog-top{display:flex;justify-content:space-between;margin-bottom:8px}
+.prog-label{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.prog-ct{font-family:var(--mono);font-size:10px;color:var(--accent)}
+.prog-track{height:2px;background:var(--border2);border-radius:1px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));transition:width .4s ease;border-radius:1px}
+
+.main{padding:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.18),transparent)}
+
+.q-wrap{display:none}
+.q-wrap.on{display:block;animation:rise .35s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.q-num{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:14px;text-transform:uppercase}
+.q-txt{font-size:22px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.q-sub{font-size:11px;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.opts{display:flex;flex-direction:column;gap:2px}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 16px;background:var(--card2);border:1.5px solid transparent;border-radius:10px;cursor:pointer;transition:all .2s}
+.opt:hover{border-color:rgba(139,92,246,0.2)}
+.opt.on{border-color:rgba(139,92,246,0.4);background:rgba(139,92,246,0.07)}
+.opt-mark{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);flex-shrink:0;margin-top:2px;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.opt.on .opt-mark{border-color:var(--accent);background:var(--accent)}
+.opt-inner{width:7px;height:7px;background:#080810;border-radius:50%;opacity:0;transition:opacity .15s}
+.opt.on .opt-inner{opacity:1}
+.opt-em{font-size:18px;flex-shrink:0}
+.opt-txt{font-size:13px;line-height:1.6}
+
+.nav-row{display:flex;gap:8px;margin-top:16px}
+.nav-back{flex:0 0 auto;padding:14px 18px;background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.nav-next{flex:1;padding:14px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,0.25)}
+.nav-next:disabled{background:var(--card2);color:var(--muted);box-shadow:none}
+.nav-next:not(:disabled):active{transform:scale(.98)}
+
+.res-wrap{display:none}
+.res-wrap.on{display:block;animation:rise .4s ease}
+
+.res-hero{background:linear-gradient(150deg,#0C0814,#08080A);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:32px 20px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.res-type-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:12px;text-transform:uppercase}
+.res-type-em{font-size:44px;display:block;margin-bottom:10px}
+.res-type-nm{font-size:26px;font-weight:900;color:var(--accent);margin-bottom:10px}
+.res-type-sub{font-size:12px;color:var(--text2);line-height:1.9}
+
+.card-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+
+.s-row{margin-bottom:14px}
+.s-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.s-nm{font-size:12px;font-weight:500}
+.s-pct{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.s-track{height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
+.s-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));transition:width 1s ease}
+
+.adv-item{padding:18px;background:var(--card2);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 10px 10px 0;margin-bottom:8px}
+.adv-num{font-family:var(--mono);font-size:8px;color:var(--accent);letter-spacing:3px;margin-bottom:6px;text-transform:uppercase}
+.adv-hd{font-size:14px;font-weight:700;margin-bottom:6px}
+.adv-tx{font-size:12px;color:var(--text2);line-height:1.9}
+
+.sci-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+.sci-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.sci-box p{font-size:11px;color:var(--muted);line-height:1.9}
+
+.retry-btn{width:100%;padding:16px;background:transparent;border:1px solid rgba(139,92,246,0.3);border-radius:10px;color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:1px}
+.retry-btn:hover{background:rgba(139,92,246,0.07)}
+
+.ftr{text-align:center;padding:40px 20px 0;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px}
+</style>
+</head>
+<body>
+<button class="back-btn" onclick="location.href='/index.html'">
+  <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>診断ツール一覧に戻る
+</button>
+<div class="hdr">
+  <div class="brand">Fit Project AI</div>
+  <h1>続かない<br><span>原因診断</span></h1>
+  <p>10問の診断で運動が続かない本当の<br>原因を行動変容理論で特定します</p>
+  <div class="sci-badge">⚗ Behavioral Science Based</div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-top"><span class="prog-label">Progress</span><span class="prog-ct" id="pct">1 / 10</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:10%"></div></div>
+</div>
+
+<div class="main" id="qArea"></div>
+
+<div class="main res-wrap" id="resArea">
+  <div class="res-hero">
+    <div class="res-type-lbl">Your Pattern Type</div>
+    <span class="res-type-em" id="rEm">—</span>
+    <div class="res-type-nm" id="rNm">—</div>
+    <div class="res-type-sub" id="rSb">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Barrier Analysis</div>
+    <div id="sBars"></div>
+  </div>
+  <div id="advList"></div>
+  <div class="sci-box">
+    <div class="sci-lbl">Scientific Reference</div>
+    <p id="sciTxt"></p>
+  </div>
+  <button class="retry-btn" onclick="retry()">もう一度診断する →</button>
+</div>
+<div class="ftr">FIT PROJECT AI — AI × プロコーチで、続く体づくりを。</div>
+
+<script>
+const questions=[
+  {txt:"運動しようとした時、一番の壁は？",sub:"最も当てはまるものを選んでください",opts:[{e:"⏰",t:"時間がない・忙しい",c:{environment:2}},{e:"😴",t:"疲れていてやる気が出ない",c:{motivation:2}},{e:"❓",t:"何をすればいいかわからない",c:{knowledge:2}},{e:"😟",t:"続けられる自信がない",c:{mindset:2}}]},
+  {txt:"運動を始めた時、どのくらいで挫折した？",sub:"直近の経験で",opts:[{e:"📅",t:"3日以内",c:{motivation:2}},{e:"📅",t:"1〜2週間",c:{environment:1,motivation:1}},{e:"📅",t:"1〜2ヶ月",c:{knowledge:1,environment:1}},{e:"📅",t:"続けたことがない",c:{mindset:2}}]},
+  {txt:"運動する環境について当てはまるのは？",sub:"",opts:[{e:"🏠",t:"ジムが遠い・行きづらい",c:{environment:2}},{e:"💰",t:"コストが気になる",c:{environment:1}},{e:"🚪",t:"環境は整っているが動けない",c:{motivation:2}},{e:"👀",t:"ロールモデルがいない",c:{mindset:1,motivation:1}}]},
+  {txt:"食事管理について正直なところは？",sub:"",opts:[{e:"🤷",t:"何を食べればいいかわからない",c:{knowledge:2}},{e:"😩",t:"わかっているけど実行できない",c:{motivation:2}},{e:"📊",t:"記録が面倒で続かない",c:{environment:1,motivation:1}},{e:"✅",t:"比較的できている",c:{}}]},
+  {txt:"運動に関する情報収集はどう？",sub:"",opts:[{e:"📱",t:"調べるが情報過多で混乱する",c:{knowledge:2}},{e:"🙈",t:"調べる気力がない",c:{motivation:2}},{e:"🤔",t:"情報はあるが自分に合うかわからない",c:{knowledge:1,mindset:1}},{e:"📚",t:"ほとんど調べていない",c:{knowledge:1}}]},
+  {txt:"過去に運動が続いた時期は？",sub:"",opts:[{e:"✨",t:"ある（何かきっかけがあった）",c:{motivation:1}},{e:"👥",t:"友人・仲間がいた時だけ",c:{environment:2}},{e:"🏆",t:"明確な目標があった時だけ",c:{mindset:1,motivation:1}},{e:"❌",t:"続いたことが一度もない",c:{mindset:2}}]},
+  {txt:"運動をサボった翌日の気持ちは？",sub:"",opts:[{e:"😔",t:"罪悪感はあるが次の行動に繋がらない",c:{mindset:2}},{e:"😤",t:"「まあいいか」と思ってそのまま",c:{motivation:2}},{e:"🔄",t:"取り戻そうとするが続かない",c:{knowledge:1,motivation:1}},{e:"😶",t:"特に何も感じない",c:{motivation:2}}]},
+  {txt:"理想の体・健康状態について",sub:"",opts:[{e:"💭",t:"具体的にイメージできている",c:{}},{e:"🌫️",t:"なんとなくはあるが具体的でない",c:{mindset:1}},{e:"❓",t:"どんな状態が理想かわからない",c:{mindset:2}},{e:"😞",t:"変われると思っていない",c:{mindset:2}}]},
+  {txt:"1日の中で運動できそうな時間帯は？",sub:"",opts:[{e:"🌅",t:"朝しかない",c:{environment:1}},{e:"🌆",t:"帰宅後しかないが疲れている",c:{motivation:1,environment:1}},{e:"🔍",t:"時間を見つけられていない",c:{environment:2}},{e:"⏳",t:"時間はあるが行動できない",c:{motivation:2}}]},
+  {txt:"もし完璧なサポートがあったとしたら？",sub:"最も欲しいものを選んでください",opts:[{e:"📋",t:"何をすればいいか教えてほしい",c:{knowledge:2}},{e:"🤝",t:"一緒にやってくれる人がほしい",c:{environment:1,motivation:1}},{e:"📈",t:"成果が見えるようにしてほしい",c:{motivation:2}},{e:"🧠",t:"モチベーションを保つ方法を教えてほしい",c:{mindset:1,motivation:1}}]},
+];
+
+let cur=0,ans=[];
+
+const types={
+  motivation:{em:'⏱️',nm:'モチベーション依存型',sub:'「やる気」を頼りにしているのが根本原因です。意志力ではなく、動ける設計が必要です。',
+    sci:'モチベーションは来ない前提で設計することが科学的に有効です（BJ Fogg, Tiny Habits）。行動のハードルを下げるシステム設計が継続の鍵です。',
+    adv:[{hd:'「やる気」に頼るのをやめる',tx:'行動を「感情」から切り離します。起きたらとりあえず運動着を着るなど、行動のトリガーを物理的に設定することで意思決定を省略できます。'},{hd:'記録を可視化する',tx:'継続した日数が見えると達成感が生まれ、ドーパミンが分泌されます。カレンダーに○をつけるだけで継続率が大幅に向上します。'},{hd:'2分ルールを今日から使う',tx:'どんなに忙しくても「2分だけ」を合言葉に。始めてしまえば継続する心理傾向（ゼイガルニク効果）を活用します。'}]},
+  knowledge:{em:'📋',nm:'知識不足型',sub:'何をすれば良いかわからない状態です。正しい情報さえ揃えば変われます。',
+    sci:'行動計画の具体性が低いと実行意図が形成されにくくなります（Gollwitzer, 1999）。「いつ・どこで・何を」を具体化することで行動率が最大3倍向上します。',
+    adv:[{hd:'1つだけ信頼できる情報源を決める',tx:'情報過多が行動を止めます。ISSN・ACSMなどエビデンスベースの機関か、資格を持つ専門家の情報に絞ることが重要です。'},{hd:'週の運動スケジュールを先にカレンダーへ入れる',tx:'「○曜日○時に実施する」と決めるだけで実行率が大幅に上がります。曖昧な意図は行動に結びつきません。'},{hd:'最初の1ヶ月はメニューを変えない',tx:'毎回「何をしよう」と考えることが行動の障壁になります。シンプルなルーティンを1ヶ月固定することで習慣化が加速します。'}]},
+  environment:{em:'🔄',nm:'環境設計型',sub:'環境が行動を邪魔しています。小さな設計変更で行動しやすくなります。',
+    sci:'習慣形成には平均66日かかります（Lally et al., 2010）。意志力に頼る行動変容は長期的に機能せず、環境設計（行動を促すトリガー設置）が最も効果的です。',
+    adv:[{hd:'摩擦を最小化する',tx:'行動までのステップを極限まで減らします。ジムが遠いなら自宅トレに切り替え、運動着を前夜に出しておくなど、環境設計が継続率を劇的に変えます。'},{hd:'既存の習慣に「くっつける」',tx:'歯磨きの後にスクワット10回など、すでに持っている習慣の直後に運動を設定。新たな意志力を使わずに行動できます（習慣スタッキング）。'},{hd:'アカウンタビリティを作る',tx:'人に宣言するか、一緒に行動する仲間を作ることで継続率が大幅に上がります。社会的コミットメントの力を使いましょう。'}]},
+  mindset:{em:'🧠',nm:'マインドセット型',sub:'「どうせ変われない」という思い込みが行動を妨げています。小さな成功体験が変えます。',
+    sci:'自己効力感（Bandura, 1977）が低いと行動開始・継続が困難になります。小さな成功体験の積み重ねが自己効力感を高める最も効果的な方法です（達成経験の原理）。',
+    adv:[{hd:'小さな成功体験を意識的に積む',tx:'「今日5分だけ」でOK。小さな行動でも成功体験が積み重なると自己効力感が上がり、「自分はできる」という認知が書き換わります。'},{hd:'完璧主義を手放す',tx:'「できない日があっても問題ない」と認識を変えましょう。研究では1日サボっても習慣への影響は軽微とされています（Lally et al., 2010）。'},{hd:'失敗を「情報」として扱う',tx:'「続かなかった」のではなく「その方法が自分に合わなかっただけ」と捉え直す。転んだ回数より、立ち上がった回数が重要です。'}]},
+};
+
+function render(){
+  const q=questions[cur];
+  document.getElementById('qArea').innerHTML=`
+    <div class="q-wrap on">
+      <div class="q-num">Question ${String(cur+1).padStart(2,'0')} / 10</div>
+      <div class="q-txt">${q.txt}</div>
+      ${q.sub?`<div class="q-sub">${q.sub}</div>`:''}
+      <div class="opts">${q.opts.map((o,i)=>`
+        <div class="opt ${ans[cur]===i?'on':''}" onclick="pick(${i})">
+          <div class="opt-mark"><div class="opt-inner"></div></div>
+          <div class="opt-em">${o.e}</div>
+          <div class="opt-txt">${o.t}</div>
+        </div>`).join('')}
+      </div>
+      <div class="nav-row">
+        ${cur>0?`<button class="nav-back" onclick="goBack()">← Back</button>`:''}
+        <button class="nav-next" id="nn" onclick="goNext()" ${ans[cur]===undefined?'disabled':''}>${cur===9?'診断する →':'次へ →'}</button>
+      </div>
+    </div>`;
+  document.getElementById('pct').textContent=`${cur+1} / 10`;
+  document.getElementById('pf').style.width=`${(cur+1)*10}%`;
+}
+function pick(i){ans[cur]=i;document.querySelectorAll('.opt').forEach((o,idx)=>o.classList.toggle('on',idx===i));document.getElementById('nn').disabled=false}
+function goNext(){if(ans[cur]===undefined)return;cur++;cur>=10?showRes():render()}
+function goBack(){cur--;render()}
+
+function showRes(){
+  const sc={motivation:0,knowledge:0,environment:0,mindset:0};
+  ans.forEach((a,qi)=>{const c=questions[qi].opts[a].c;Object.entries(c).forEach(([k,v])=>sc[k]=(sc[k]||0)+v)});
+  const maxK=Object.keys(sc).reduce((a,b)=>sc[a]>sc[b]?a:b);
+  const t=types[maxK];
+  document.getElementById('rEm').textContent=t.em;
+  document.getElementById('rNm').textContent=t.nm;
+  document.getElementById('rSb').textContent=t.sub;
+  const mx=Math.max(...Object.values(sc),1);
+  const cats={motivation:'モチベーション',knowledge:'知識・情報',environment:'環境設計',mindset:'マインドセット'};
+  document.getElementById('sBars').innerHTML=Object.entries(sc).map(([k,v])=>`
+    <div class="s-row">
+      <div class="s-top"><span class="s-nm">${cats[k]}</span><span class="s-pct">${Math.round(v/mx*100)}%</span></div>
+      <div class="s-track"><div class="s-fill" id="sf_${k}" style="width:0"></div></div>
+    </div>`).join('');
+  setTimeout(()=>Object.entries(sc).forEach(([k,v])=>{const el=document.getElementById('sf_'+k);if(el)el.style.width=Math.round(v/mx*100)+'%'}),100);
+  document.getElementById('advList').innerHTML=t.adv.map((a,i)=>`
+    <div class="adv-item">
+      <div class="adv-num">Action 0${i+1}</div>
+      <div class="adv-hd">${a.hd}</div>
+      <div class="adv-tx">${a.tx}</div>
+    </div>`).join('');
+  document.getElementById('sciTxt').textContent=t.sci;
+  document.getElementById('qArea').style.display='none';
+  document.querySelector('.prog-wrap').style.display='none';
+  const rw=document.getElementById('resArea');
+  rw.classList.add('on');rw.style.opacity=0;
+  setTimeout(()=>{rw.style.transition='opacity .5s';rw.style.opacity=1},10);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function retry(){cur=0;ans=[];document.getElementById('resArea').classList.remove('on');document.getElementById('qArea').style.display='block';document.querySelector('.prog-wrap').style.display='block';render();window.scrollTo({top:0,behavior:'smooth'})}
+render();
+</script>
+
+</body>
+</html>
