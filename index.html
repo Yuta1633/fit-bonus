@@ -379,6 +379,7 @@ html, body {
   user-select: none;
 }
 .unlock-btn {
+  margin-top: 10px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -406,6 +407,52 @@ html, body {
 .feat-list { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .feat-list li { font-size: 11px; color: #8a8270; line-height: 1.7; display: flex; align-items: flex-start; gap: 7px; }
 .feat-list li::before { content: '✓'; color: var(--pg); font-weight: 900; flex-shrink: 0; }
+
+.pass-hint { font-size: 10px; color: #6a6252; line-height: 1.6; margin-bottom: 6px; }
+.pass-mini { display: flex; gap: 6px; margin-top: 4px; }
+.pass-mini-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,199,89,0.25);
+  border-radius: 8px;
+  padding: 9px 10px;
+  color: #f0f0f8;
+  font-size: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.pass-mini-input::placeholder { color: #4a3f22; }
+.pass-mini-input:focus { border-color: var(--pg); }
+.pass-mini-btn {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--pg2), var(--pg));
+  border: none;
+  color: #201404;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 0 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+.pass-mini-btn:hover { transform: scale(1.03); }
+.pass-mini-msg { font-size: 10px; margin-top: 6px; min-height: 13px; font-weight: 700; }
+.pass-mini-msg.err { color: #FF6B6B; }
+.pass-mini-msg.ok { color: #4ADE80; }
+.pass-mini-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--pg);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,199,89,0.3);
+  padding-bottom: 1px;
+  width: fit-content;
+}
 
 .cta-sec {
   background: #03030c;
@@ -635,11 +682,17 @@ footer strong { color: #6060a0; }
           <div class="preview-box">RANK: ● / SABCD</div>
           <div class="card-ft">
             <span class="pages">写真1枚でOK</span>
-            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
-              無料相談でアンロック
-            </a>
           </div>
+          <div class="pass-hint">暗証番号は無料相談のご予約後、24時間以内にお送りします</div>
+          <div class="pass-mini">
+            <input type="text" id="passInput01" class="pass-mini-input" placeholder="暗証番号" inputmode="latin" autocomplete="off">
+            <button class="pass-mini-btn" onclick="checkPassCard('01')">解放</button>
+          </div>
+          <div class="pass-mini-msg" id="passMsg01"></div>
+          <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+            無料相談でアンロック
+          </a>
         </div>
       </div>
 
@@ -662,11 +715,17 @@ footer strong { color: #6060a0; }
           <div class="preview-box">RESULT: あなたは「◯◯◯◯型」</div>
           <div class="card-ft">
             <span class="pages">10問・約2分</span>
-            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
-              無料相談でアンロック
-            </a>
           </div>
+          <div class="pass-hint">暗証番号は無料相談のご予約後、24時間以内にお送りします</div>
+          <div class="pass-mini">
+            <input type="text" id="passInput02" class="pass-mini-input" placeholder="暗証番号" inputmode="latin" autocomplete="off">
+            <button class="pass-mini-btn" onclick="checkPassCard('02')">解放</button>
+          </div>
+          <div class="pass-mini-msg" id="passMsg02"></div>
+          <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+            無料相談でアンロック
+          </a>
         </div>
       </div>
 
@@ -690,11 +749,17 @@ footer strong { color: #6060a0; }
           <div class="preview-box">DAILY TARGET: ●●〜●● g</div>
           <div class="card-ft">
             <span class="pages">約1分で算出</span>
-            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
-              無料相談でアンロック
-            </a>
           </div>
+          <div class="pass-hint">暗証番号は無料相談のご予約後、24時間以内にお送りします</div>
+          <div class="pass-mini">
+            <input type="text" id="passInput03" class="pass-mini-input" placeholder="暗証番号" inputmode="latin" autocomplete="off">
+            <button class="pass-mini-btn" onclick="checkPassCard('03')">解放</button>
+          </div>
+          <div class="pass-mini-msg" id="passMsg03"></div>
+          <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+            無料相談でアンロック
+          </a>
         </div>
       </div>
 
@@ -718,11 +783,17 @@ footer strong { color: #6060a0; }
           <div class="preview-box">TIMELINE: 起床●:●● 〜 就寝●:●●</div>
           <div class="card-ft">
             <span class="pages">約1分で生成</span>
-            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
-              無料相談でアンロック
-            </a>
           </div>
+          <div class="pass-hint">暗証番号は無料相談のご予約後、24時間以内にお送りします</div>
+          <div class="pass-mini">
+            <input type="text" id="passInput04" class="pass-mini-input" placeholder="暗証番号" inputmode="latin" autocomplete="off">
+            <button class="pass-mini-btn" onclick="checkPassCard('04')">解放</button>
+          </div>
+          <div class="pass-mini-msg" id="passMsg04"></div>
+          <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+            無料相談でアンロック
+          </a>
         </div>
       </div>
 
@@ -746,11 +817,17 @@ footer strong { color: #6060a0; }
           <div class="preview-box">FREQUENCY: 週●回プラン</div>
           <div class="card-ft">
             <span class="pages">約1分で設計</span>
-            <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
-              無料相談でアンロック
-            </a>
           </div>
+          <div class="pass-hint">暗証番号は無料相談のご予約後、24時間以内にお送りします</div>
+          <div class="pass-mini">
+            <input type="text" id="passInput05" class="pass-mini-input" placeholder="暗証番号" inputmode="latin" autocomplete="off">
+            <button class="pass-mini-btn" onclick="checkPassCard('05')">解放</button>
+          </div>
+          <div class="pass-mini-msg" id="passMsg05"></div>
+          <a href="https://forms.gle/2cTQeZEERWpZVMBg7" target="_blank" class="unlock-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h12z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+            無料相談でアンロック
+          </a>
         </div>
       </div>
 
@@ -769,5 +846,36 @@ footer strong { color: #6060a0; }
   <strong>Fit Project AI</strong> &nbsp;|&nbsp; あなただけの正解を仕組みにして、最短で理想の体へ
 </footer>
 
+<script>
+// 暗証番号はここを書き換えてください(大文字・小文字は区別しません)
+const PASSCODE = "FITPROJECT";
+
+function checkPassCard(id) {
+  const input = document.getElementById('passInput' + id);
+  const msg = document.getElementById('passMsg' + id);
+  const val = input.value.trim();
+
+  if (!val) {
+    msg.textContent = '暗証番号を入力してください';
+    msg.className = 'pass-mini-msg err';
+    return;
+  }
+
+  if (val.toUpperCase() === PASSCODE) {
+    msg.textContent = '解放しました';
+    msg.className = 'pass-mini-msg ok';
+    const card = input.closest('.tool-card');
+    if (card) {
+      const preview = card.querySelector('.preview-box');
+      if (preview) preview.style.filter = 'none';
+      const lock = card.querySelector('.lock-badge');
+      if (lock) lock.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 1a5 5 0 00-5 5v2a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2H9V6a3 3 0 016 0v1h2V6a5 5 0 00-5-5z"/></svg>UNLOCKED';
+    }
+  } else {
+    msg.textContent = '暗証番号が正しくありません';
+    msg.className = 'pass-mini-msg err';
+  }
+}
+</script>
 </body>
 </html>
